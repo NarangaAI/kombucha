@@ -9,15 +9,15 @@
   <link rel="icon" href="assets/wellness-symbol.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="font.css?v=4">
-  <link rel="stylesheet" href="style.css?v=30">
-  <link rel="stylesheet" href="gallery.css?v=26">
+  <link rel="stylesheet" href="style.css?v=36">
+  <link rel="stylesheet" href="gallery.css?v=36">
   <link rel="stylesheet" href="camera.css?v=5">
   <link rel="stylesheet" href="exhibition.css?v=34">
   <link rel="stylesheet" href="showroom-light.css?v=4">
   <link rel="stylesheet" href="carton.css?v=29">
-  <script defer src="gallery.js?v=30"></script>
+  <script defer src="gallery.js?v=36"></script>
   <script defer src="showroom-motion.js?v=29"></script>
-  <script defer src="site.js?v=34"></script>
+  <script defer src="site.js?v=36"></script>
 </head>
 <body>
   <a class="skip" href="#collection">제품소개로 건너뛰기</a>
@@ -106,13 +106,13 @@
       <ul class="exhibit-wall" aria-label="인증 및 특허 현황">
         <li class="exhibit-bay">
           <button class="exhibit-open" type="button" aria-haspopup="dialog" aria-label="제로슈가 콜라겐 특허 크게 보기">
-            <span class="exhibit-frame"><img src="assets/patent-zero-sugar.png?v=35" alt="제로슈가콜라겐 가루콤부차 및 그 제조방법에 대한 특허증" width="753" height="1061"></span>
+            <span class="exhibit-frame"><img src="assets/patent-zero-sugar.png?v=36" alt="제로슈가콜라겐 가루콤부차 및 그 제조방법에 대한 특허증" width="753" height="1061"></span>
             <span class="exhibit-label"><small>01</small><span>제로슈가 콜라겐 특허</span></span>
           </button>
         </li>
         <li class="exhibit-bay">
           <button class="exhibit-open" type="button" aria-haspopup="dialog" aria-label="베트남 인증서 크게 보기">
-            <span class="exhibit-frame"><img src="assets/vietnam-declaration.png?v=35" alt="원데이 콜라겐 콤부차 바나나맛의 베트남 제품 자가신고서" width="762" height="1067"></span>
+            <span class="exhibit-frame"><img src="assets/vietnam-declaration.png?v=36" alt="원데이 콜라겐 콤부차 바나나맛의 베트남 제품 자가신고서" width="762" height="1067"></span>
             <span class="exhibit-label"><small>02</small><span>베트남 인증서</span></span>
           </button>
         </li>
@@ -129,7 +129,7 @@
         </li>
         <li class="exhibit-bay">
           <div class="exhibit-pending">
-            <span class="exhibit-label"><small>05</small><span>할랄 인증준비중 27년</span></span>
+            <span class="exhibit-label"><small>05</small><span>할랄 인증 준비중 27년</span></span>
           </div>
         </li>
       </ul>
@@ -163,11 +163,17 @@
   </dialog>
   <dialog id="enquiry-dialog" class="site-dialog" aria-labelledby="enquiry-title">
     <button type="button" class="dialog-exit" data-close aria-label="제품 문의 닫기">×</button>
-    <h2 id="enquiry-title">제품 문의</h2><p>문의 채널을 준비 중입니다<br>지금은 작성한 내용을 복사해 둘 수 있습니다</p>
-    <form id="enquiry-form">
-      <label for="enquiry-product">관심 제품</label><select id="enquiry-product"><option>전체 컬렉션</option><optgroup label="원데이 콜라겐 콤부차"><option>망고맛</option><option>레몬맛</option><option>바나나맛</option></optgroup><optgroup label="원데이 프로틴 콤부차"><option>딸기맛</option><option>블루베리맛</option></optgroup></select>
-      <label for="enquiry-text">문의 내용</label><textarea id="enquiry-text" required rows="4"></textarea>
-      <button class="rule-link" type="submit">작성한 내용 복사</button><p class="copy-status" role="status"></p>
+    <h2 id="enquiry-title">제품 문의</h2><p>제품에 대해 궁금한 점을 남겨 주세요<br>답변은 입력하신 이메일로 보내드립니다</p>
+    <form id="enquiry-form" action="/api/inquiries" method="post">
+      <p id="enquiry-status" role="status"></p>
+      <fieldset aria-label="문의 작성">
+        <label for="enquiry-product">관심 제품</label><select id="enquiry-product" name="product"><option>전체 컬렉션</option><optgroup label="원데이 콜라겐 콤부차"><option>망고맛</option><option>레몬맛</option><option>바나나맛</option></optgroup><optgroup label="원데이 프로틴 콤부차"><option>딸기맛</option><option>블루베리맛</option></optgroup></select>
+        <label for="enquiry-email">답변받을 이메일</label>
+        <input id="enquiry-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@example.com" required>
+        <label for="enquiry-text">문의 내용</label><textarea id="enquiry-text" name="message" required maxlength="4000" rows="4"></textarea>
+        <div hidden><label>웹사이트<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      </fieldset>
+      <button class="rule-link" type="submit" disabled>문의 보내기</button>
     </form>
   </dialog>
 </body>

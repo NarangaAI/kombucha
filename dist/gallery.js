@@ -54,7 +54,6 @@
         <h2 id="collection-title" lang="en">The <em>Wellness</em> collection</h2>
         <p>다섯 가지 맛의 콤부차 <i></i><span class="sr-desktop-hint">제품을 선택해 맛을 확인하세요</span><span class="sr-touch-hint">제품을 눌러 맛을 확인하세요</span></p>
       </div>
-      <a class="sr-next" href="#about">콤부차 소개 <span aria-hidden="true">↓</span></a>
     </div></div>`;
 
   const dialog = document.createElement('dialog');

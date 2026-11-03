@@ -92,11 +92,7 @@
   for (const name of ['shop','enquiry']) {
     const opener = document.getElementById(name + '-open');
     const dialog = document.getElementById(name + '-dialog');
-    opener.addEventListener('click', () => {
-      const status = dialog.querySelector('.copy-status');
-      if (status) status.textContent = '';
-      dialog.showModal();
-    });
+    opener.addEventListener('click', () => dialog.showModal());
     dialog.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => dialog.close()));
     dialog.addEventListener('click', event => {
       if (event.target !== dialog) return;
@@ -105,26 +101,66 @@
     });
   }
 
-  const enquiryText = document.getElementById('enquiry-text');
-  enquiryText.addEventListener('input', () => enquiryText.setCustomValidity(''));
-  document.getElementById('enquiry-form').addEventListener('submit', async event => {
+  const form = document.getElementById('enquiry-form');
+  const messageField = form.elements.message;
+  const fields = form.querySelector('fieldset');
+  const submit = form.querySelector('button[type="submit"]');
+  const status = document.getElementById('enquiry-status');
+  let checking = false;
+
+  document.getElementById('enquiry-open').addEventListener('click', async () => {
+    if (checking || fields.disabled) return;
+    checking = true;
+    submit.disabled = true;
+    status.textContent = '접수 가능 여부를 확인하고 있습니다';
+    try {
+      const response = await fetch(form.action + '/status', {cache:'no-store', signal:AbortSignal.timeout(8000)});
+      if (!response.ok) throw new Error();
+      const {available} = await response.json();
+      submit.disabled = available !== true;
+      status.textContent = submit.disabled ? '현재 이메일 문의 접수를 준비 중입니다' : '';
+    } catch {
+      status.textContent = '접수 상태를 확인할 수 없습니다\n잠시 후 다시 열어 주세요';
+    } finally {
+      checking = false;
+    }
+  });
+
+  messageField.addEventListener('input', () => messageField.setCustomValidity(''));
+  form.addEventListener('submit', async event => {
     event.preventDefault();
-    const message = enquiryText.value.trim();
+    if (submit.disabled) return;
+    const message = messageField.value.trim();
     if (!message) {
-      enquiryText.setCustomValidity('문의 내용을 입력해 주세요');
-      enquiryText.reportValidity();
+      messageField.setCustomValidity('문의 내용을 입력해 주세요');
+      messageField.reportValidity();
       return;
     }
-    const product = document.getElementById('enquiry-product').value;
-    const draft = '[웰니스 콤부차 문의] ' + product + '\n\n' + message;
-    const status = event.currentTarget.querySelector('.copy-status');
+    const data = Object.fromEntries(new FormData(form));
+    data.message = message;
+    fields.disabled = true;
+    submit.disabled = true;
+    status.textContent = '문의를 보내고 있습니다';
     try {
-      await navigator.clipboard.writeText(draft);
-      status.textContent = '관심 제품과 문의 내용을 복사했어요';
+      const response = await fetch(form.action, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data),
+        redirect:'error', signal:AbortSignal.timeout(45000)
+      });
+      if (response.ok && (await response.json()).ok === true) {
+        form.reset();
+        status.textContent = '문의가 접수되었습니다\n입력하신 이메일로 답변드리겠습니다';
+      } else if (response.status === 429) {
+        status.textContent = '잠시 후 다시 보내 주세요';
+      } else if (response.status === 400) {
+        status.textContent = '이메일 주소와 문의 내용을 확인해 주세요';
+      } else {
+        status.textContent = '지금은 문의를 보낼 수 없습니다\n잠시 후 다시 시도해 주세요';
+      }
     } catch {
-      enquiryText.focus();
-      enquiryText.select();
-      status.textContent = '선택된 문의 내용을 기기의 복사 기능으로 복사해 주세요';
+      status.textContent = '전송 결과를 확인할 수 없습니다\n네트워크 연결을 확인해 주세요';
+    } finally {
+      fields.disabled = false;
+      submit.disabled = false;
     }
   });
 })();
