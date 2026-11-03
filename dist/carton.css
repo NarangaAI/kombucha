@@ -1,0 +1,142 @@
+/* Each carton uses the original shelf footprint and floor line as its unit of measure. */
+.sr-carton {
+  --carton-width: 112cqw;
+  --carton-yaw: -42deg;
+  --carton-center: 43%;
+  --paper-veil: clamp(.035, calc(.92 - .81 * var(--bottle-exposure)), .63);
+}
+
+.sr-carton[data-index="0"] {
+  --carton-width: 135cqw;
+  --carton-yaw: -56deg;
+  --carton-center: 42.3%;
+}
+
+.sr-carton[data-index="2"] {
+  --carton-width: 106cqw;
+  --carton-yaw: -38deg;
+}
+
+.sr-carton :is(.sr-vessel, .sr-reflect) {
+  container-type: size;
+}
+
+.sr-carton .carton-mount {
+  position: absolute;
+  display: block;
+  bottom: min(2.2cqw, 1.5cqh);
+  left: var(--carton-center);
+  width: min(var(--carton-width), 68cqh);
+  aspect-ratio: 544 / 784;
+  transform: translateX(-50%);
+  --carton-depth: min(calc(var(--carton-width) * .15), 10.2cqh);
+}
+
+.sr-carton .carton-model {
+  display: block;
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 100%;
+  transform: perspective(max(2600px, 1400cqw)) rotateX(-5deg)
+             rotateY(calc(var(--carton-yaw) + var(--pack-turn, 0deg)));
+  transition: transform .34s ease-out;
+}
+
+.sr-carton :is(.carton-face, .carton-side, .carton-lid) {
+  display: block;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.sr-carton :is(.carton-face, .carton-side, .carton-lid)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: #110e0c;
+  opacity: var(--paper-veil);
+  transition: opacity .31s ease;
+  pointer-events: none;
+}
+
+.sr-carton .carton-face {
+  inset: 0;
+  background: var(--paper);
+  transform: translateZ(.04px);
+}
+
+/* The photograph supplies the ink and paper grain. Each case supplies its own lamp color. */
+.sr-carton .carton-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 82% 75% at var(--spec-x) -9%,
+      color-mix(in srgb, var(--accent) 24%, transparent), transparent 89%),
+    linear-gradient(100deg, #fff5da08, transparent 48%, #241e181b),
+    linear-gradient(178deg, transparent 9%, #1c17151a 57%, #19131042);
+  box-shadow: inset 0 1px 1px #fff1ca66, inset -1px 0 #35291938;
+}
+
+.sr-carton .carton-side {
+  top: 0;
+  left: 100%;
+  width: var(--carton-depth);
+  height: 100%;
+  transform-origin: left;
+  transform: rotateY(90deg);
+  background:
+    linear-gradient(180deg, #32292059, #1c1819a8),
+    linear-gradient(90deg, #4535241c, transparent 7% 77%, #241c171a),
+    linear-gradient(163deg, var(--paper) 35%, color-mix(in srgb, var(--paper) 47%, #f3ecd6) 35.5% 72%, var(--paper) 72.5%);
+  box-shadow: inset 1px 0 #fff0bf70, inset -1px 0 #211c184d;
+}
+
+.sr-carton .carton-lid {
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: var(--carton-depth);
+  transform-origin: bottom;
+  transform: rotateX(90deg);
+  background:
+    linear-gradient(180deg, #fffddd52, transparent 19% 77%, #786a4945 81%, #fff4c661 85%, #fff5d52f),
+    linear-gradient(110deg, color-mix(in srgb, var(--paper) 65%, #fff1cf), var(--paper));
+  box-shadow: inset 0 0 0 1px #dacaa382;
+}
+
+:is(#collection, .sr-dialog) .sr-carton .carton-face img.sr-bottle {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  transform: none;
+  filter: none;
+}
+
+.sr-carton .sr-vessel .carton-mount::before {
+  content: "";
+  position: absolute;
+  left: -6%;
+  bottom: -2.2%;
+  width: 119%;
+  height: 4.9%;
+  transform: skewX(-17deg);
+  background: radial-gradient(ellipse, #090705f0 18%, #100c08ba 44%, transparent 73%);
+  filter: blur(1px);
+}
+
+.sr-carton .carton-mirror {
+  display: block;
+  position: absolute;
+  inset: 0;
+  transform: scaleY(-1);
+  filter: blur(1.3px) brightness(.61) saturate(.78);
+}
+
+.sr-dialog.sr-detail-visible .sr-clone:has(.sr-carton.is-selected) {
+  will-change: auto;
+}
