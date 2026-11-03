@@ -16,6 +16,10 @@
   position: relative;
   height: var(--wall-height);
   isolation: isolate;
+  /* Each bay shows a 313px slice of the 1672px wall photo. */
+  --slice: calc(100% * var(--slice-start) / (1672 - 313));
+  --crop-x: calc(100% * var(--opening-x) / (1672 - var(--opening-width)));
+  --crop-width: calc(100% * 1672 / var(--opening-width));
 }
 /* Adjoining 313px slices of the original showroom, including the continuous floor. */
 .exhibit-bay::before {
@@ -26,11 +30,11 @@
   background: url("assets/showroom.webp") var(--slice) center / 534.1853% 100% no-repeat;
   filter: brightness(.5) saturate(.74);
 }
-.exhibit-bay:nth-child(1) { --slice: 4.1207%;  --crop-x: 6.9416%;  --crop-width: 770.5069%; }
-.exhibit-bay:nth-child(2) { --slice: 27.1523%; --crop-x: 28.6986%; --crop-width: 788.6792%; }
-.exhibit-bay:nth-child(3) { --slice: 50.184%;  --crop-x: 50.1028%; --crop-width: 784.9765%; }
-.exhibit-bay:nth-child(4) { --slice: 73.2156%; --crop-x: 71.6049%; --crop-width: 781.3084%; }
-.exhibit-bay:nth-child(5) { --slice: 96.2472%; --crop-x: 93.393%;  --crop-width: 763.4703%; }
+.exhibit-bay:nth-child(1) { --slice-start: 56;   --opening-x: 101;  --opening-width: 217; }
+.exhibit-bay:nth-child(2) { --slice-start: 369;  --opening-x: 419;  --opening-width: 212; }
+.exhibit-bay:nth-child(3) { --slice-start: 682;  --opening-x: 731;  --opening-width: 213; }
+.exhibit-bay:nth-child(4) { --slice-start: 995;  --opening-x: 1044; --opening-width: 214; }
+.exhibit-bay:nth-child(5) { --slice-start: 1308; --opening-x: 1357; --opening-width: 219; }
 .exhibit-bay::after {
   content: "";
   position: absolute;
@@ -47,13 +51,12 @@
 .exhibit-open {
   position: absolute;
   top: 13.5%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: calc(100% * (var(--opening-x) - var(--slice-start)) / 313);
   display: grid;
-  place-items: center;
-  width: 68%;
+  place-items: end center;
+  width: calc(100% * var(--opening-width) / 313);
   height: 60.47%;
-  padding: 0;
+  padding: 0 0 2.9%;
   border: 0;
   background: none;
   color: inherit;
@@ -77,8 +80,9 @@
   background: linear-gradient(120deg, #fff9dc17, transparent 44%, #1e17100e);
 }
 .exhibit-open .exhibit-frame {
-  width: min(83%, calc(var(--wall-height) * .325));
-  transform-origin: 50% 66%;
+  /* One 195px-wide frame in photo coordinates, even where the recesses differ. */
+  width: min(calc(100% * 195 / var(--opening-width)), calc(var(--wall-height) * .39));
+  transform-origin: center bottom;
   transform: scale(var(--frame-zoom, 1));
   filter: brightness(var(--paper-light, .81));
   transition: transform .4s cubic-bezier(.2,.68,.23,1), filter .34s ease;
@@ -101,11 +105,11 @@
 }
 .exhibit-label small {color: #dacdb9; font-size: .72em; letter-spacing: .05em; font-variant-numeric: tabular-nums;}
 .exhibit-bay:has(.exhibit-open:focus-visible) {
-  --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.13;
+  --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.045;
 }
 @media (hover:hover) and (pointer:fine) {
   .exhibit-bay:has(.exhibit-open:hover) {
-    --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.13;
+    --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.045;
   }
 }
 .exhibit-heading {
@@ -166,8 +170,8 @@ html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
     clip-path: inset(0);
     mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 6%, transparent 134deg, #000 165deg 195deg, transparent 226deg);
   }
-  .exhibit-open {inset: 0; transform: none; width: 100%; height: 100%;}
-  .exhibit-open .exhibit-frame {width: 82%; padding: clamp(2px, .48vw, 5px);}
+  .exhibit-open {inset: 0; width: 100%; height: 100%; padding-bottom: 4.25%;}
+  .exhibit-open .exhibit-frame {width: 91.5%; padding: clamp(2px, .48vw, 5px);}
   .exhibit-label {top: calc(100% + 5px); gap: .38em; font-size: clamp(11px, 1.85vw, 15px);}
   .exhibit-heading {position: static; padding: 3px var(--gutter) clamp(22px, 5vw, 44px);}
   .exhibit-heading h2 {font-size: clamp(26px, 6vw, 34px);}
