@@ -1,12 +1,12 @@
 /* Measure from the whole set: the photographed openings differ slightly in width. */
 .sr-world {
   container-type: size;
-  --carton-width: min(11.5cqw, 21cqh);
+  --carton-width: min(9.65cqw, 21cqh);
   --size: calc(var(--carton-width) * 1.565);
 }
 
 @media (max-width:760px), (max-aspect-ratio:1/1) and (max-width:1050px) {
-  .sr-world { --carton-width: min(21.4cqw, 10cqh); }
+  .sr-world { --carton-width: min(17.75cqw, 10cqh); }
 }
 
 .sr-carton {
@@ -22,7 +22,7 @@
   left: 50%;
   width: var(--carton-width);
   aspect-ratio: 544 / 784;
-  transform: translateX(-60%);
+  transform: translateX(-61.2%);
 }
 
 .sr-carton .carton-model {
