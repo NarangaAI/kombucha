@@ -164,7 +164,6 @@
       scrollX, scrollY, progress:0, closing:false, raf:0
     };
     current = state;
-    viewport.append(clone);
     const scrollbar = innerWidth - root.clientWidth;
     if (scrollbar > 0) {
       const pad = parseFloat(getComputedStyle(document.body).paddingInlineEnd) || 0;
@@ -174,8 +173,11 @@
     dialog.showModal();
     dialog.scrollTop = 0;
     back.focus({preventScroll:true});
+    // The cartons derive their perspective from the scene dimensions. Give the
+    // camera its measured size and starting pose before attaching its 3D faces.
     measure(state);
     paint(state);
+    viewport.append(clone);
     dialog.classList.add('sr-entered');
     run(state);
   }

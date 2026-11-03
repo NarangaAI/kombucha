@@ -36,6 +36,11 @@
   transition: transform .34s ease-out;
 }
 
+.sr-clone .carton-model {
+  /* The camera animates the whole scene. Only the live shelf eases pointer tilt. */
+  transition: none;
+}
+
 .sr-carton :is(.carton-face, .carton-side, .carton-lid) {
   display: block;
   position: absolute;
