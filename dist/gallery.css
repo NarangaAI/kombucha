@@ -111,10 +111,9 @@
 .sr-chrome :is(a,button) { pointer-events:auto; }
 .sr-logo,.sr-detail-logo {
   position:absolute; left:clamp(20px,3.5vw,70px); top:clamp(18px,3.5vh,43px);
-  color:#fff; display:grid; justify-items:start;
-  font:700 clamp(15px,1.35vw,23px)/1 var(--sans);
-  letter-spacing:.13em; text-shadow:0 1px 7px #000d;
+  display:block;
 }
+.sr-logo .brand-logo,.sr-detail-logo .brand-logo {width:clamp(105px,9vw,143px)}
 .sr-back {
   position:absolute; left:50%; transform:translateX(-50%); top:clamp(16px,3.2vh,37px);
   display:flex; align-items:center; justify-content:center; gap:9px;
@@ -187,7 +186,7 @@
   .sr-folio p {font-size:clamp(10px,2.2vw,14px)}
   .sr-desktop-hint {display:none}.sr-touch-hint {display:inline}
   .sr-next {bottom:1.25%;right:5.3%;font-size:10px}
-  .sr-logo,.sr-detail-logo {top:2.6%;left:5.3%;font-size:15px}
+  .sr-logo,.sr-detail-logo {top:2.6%;left:5.3%}
   .sr-dialog[open] {overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
   .sr-dialog::-webkit-scrollbar {display:none}
   .sr-viewport,.sr-vignette{height:100dvh}

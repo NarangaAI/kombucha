@@ -113,7 +113,7 @@
       return;
     }
     const product = document.getElementById('enquiry-product').value;
-    const draft = '[모루 콤부차 문의] ' + product + '\n\n' + message;
+    const draft = '[웰니스 콤부차 문의] ' + product + '\n\n' + message;
     const status = event.currentTarget.querySelector('.copy-status');
     try {
       await navigator.clipboard.writeText(draft);

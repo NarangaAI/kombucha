@@ -40,9 +40,9 @@
       <div class="sr-floor" aria-hidden="true"></div>${products.map(shelf).join('')}
     </div>
     <div class="sr-chrome">
-      <a class="sr-logo" href="#home" aria-label="모루 메인으로">MORU</a>
+      <a class="sr-logo" href="#home" aria-label="웰니스 프로바이오틱스 홈"><img class="brand-logo" src="assets/wellness-logo-light.svg" alt="Wellness Probiotics" width="178" height="40"></a>
       <div class="sr-folio"><span class="sr-eyebrow">제품소개</span>
-        <h2 id="collection-title" lang="en">The <em>moru</em> collection</h2>
+        <h2 id="collection-title" lang="en">The <em>Wellness</em> collection</h2>
         <p>다섯 가지 맛의 콤부차 <i></i><span class="sr-desktop-hint">병을 선택해 맛을 확인하세요.</span><span class="sr-touch-hint">병을 눌러 맛을 확인하세요.</span></p>
       </div>
       <a class="sr-next" href="#about">콤부차 소개 <span aria-hidden="true">↓</span></a>
@@ -53,7 +53,7 @@
   dialog.setAttribute('aria-labelledby','sr-detail-title');
   dialog.innerHTML = `<div class="sr-viewport" aria-hidden="true"></div><div aria-hidden="true" class="sr-vignette"></div>
     <div class="sr-details"></div>
-    <div class="sr-detail-logo" aria-hidden="true">MORU</div>
+    <div class="sr-detail-logo" aria-hidden="true"><img class="brand-logo" src="assets/wellness-logo-light.svg" alt="" width="178" height="40"></div>
     <button type="button" class="sr-back" autofocus><span aria-hidden="true">←</span> 제품 목록</button>`;
   document.body.append(dialog);
   const room = collection.querySelector('.sr-room');
