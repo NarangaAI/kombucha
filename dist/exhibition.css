@@ -1,0 +1,148 @@
+.exhibition {
+  --wall-height: clamp(475px, 43vw, 750px);
+  position: relative;
+  isolation: isolate;
+  background: #05060a;
+  color: #f2eee7;
+}
+.exhibit-wall {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.exhibit-bay {
+  position: relative;
+  height: var(--wall-height);
+  isolation: isolate;
+}
+/* Three adjoining 313px-wide pieces of the product room's original 1672px wall. */
+.exhibit-bay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: url("assets/showroom.webp") var(--slice) center / 534.1853% 100% no-repeat;
+  filter: brightness(.5) saturate(.74);
+}
+.exhibit-bay:nth-child(1) { --slice: 27.1523%; }
+.exhibit-bay:nth-child(2) { --slice: 50.184%; }
+.exhibit-bay:nth-child(3) { --slice: 73.2156%; }
+.exhibit-bay::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 26% 63% at 50% 25%, #ffefc945, transparent 86%),
+    url("assets/showroom.webp") var(--slice) center / 534.1853% 100% no-repeat;
+  clip-path: inset(15.7% 17% 26.8%);
+  mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 15.7%, transparent 139deg, #0009 158deg, #000 174deg 186deg, #0009 202deg, transparent 221deg);
+  opacity: var(--spotlight, .12);
+  transition: opacity .34s ease;
+}
+.exhibit-open {
+  position: absolute;
+  top: 45.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(50%, calc(var(--wall-height) * .325));
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: zoom-in;
+}
+.exhibit-frame {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  padding: clamp(5px, .52vw, 9px);
+  background: linear-gradient(145deg, #b2996d, #5a4a38 14%, #312a22 54%, #837057 86%, #d2b88e);
+  box-shadow: inset 0 0 0 1px #e9dabe80, inset 0 0 0 3px #2d281f99,
+    2px 4px 3px #080706c9, 3px 12px 18px #000a;
+}
+.exhibit-frame img {display: block; width: 100%; height: auto; box-shadow: 0 0 0 1px #241c11;}
+.exhibit-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, #fff9dc17, transparent 44%, #1e17100e);
+}
+.exhibit-open .exhibit-frame {
+  transform-origin: 50% 66%;
+  transform: scale(var(--frame-zoom, 1));
+  filter: brightness(var(--paper-light, .81));
+  transition: transform .4s cubic-bezier(.2,.68,.23,1), filter .34s ease;
+}
+.exhibit-label {
+  position: absolute;
+  inset: calc(100% + 14px) 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .65em;
+  font-size: clamp(13px, 1.04vw, 17px);
+  font-weight: 600;
+  text-shadow: 0 1px 5px #000;
+}
+.exhibit-label small {color: #dacdb9; font-size: .72em; letter-spacing: .05em; font-variant-numeric: tabular-nums;}
+.exhibit-bay:has(.exhibit-open:focus-visible) {
+  --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.13;
+}
+@media (hover:hover) and (pointer:fine) {
+  .exhibit-bay:has(.exhibit-open:hover) {
+    --paper-light: 1.04; --spotlight: 1; --frame-zoom: 1.13;
+  }
+}
+.exhibit-heading,.exhibit-swipe {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  text-shadow: 0 2px 12px #000;
+}
+.exhibit-heading {left: var(--gutter); bottom: 3.8%;}
+.exhibit-heading h2 {font-size: clamp(30px, 3vw, 54px); letter-spacing: -.05em; line-height: 1.18;}
+.exhibit-heading p {font-size: 13px; color: #d1cbc4; margin-top: 5px;}
+.exhibit-swipe {display: none;}
+.exhibit-viewer {
+  --viewer-width: min(83vw, 530px, calc((100dvh - 95px) * .765));
+  width: var(--viewer-width);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+  background: transparent;
+  color: #f3f0e8;
+}
+.exhibit-viewer::backdrop {background: #050609eb;}
+html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
+.exhibit-viewer-bar {display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 8px;}
+.exhibit-viewer-bar h2 {font-size: clamp(14px, 1.2vw, 18px); font-weight: 600;}
+.exhibit-close {display: flex; align-items: center; gap: 9px; min-height: 44px; border: 0; padding: 0 4px; background: none; font-size: 14px;}
+.exhibit-close span {font-size: 22px; font-weight: 400;}
+.exhibit-enlarged {padding: clamp(7px, .8vw, 13px);}
+@media (max-width: 700px) {
+  .exhibition {--wall-height: clamp(475px, 72svh, 620px);}
+  .exhibit-wall {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(80vw, 365px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #645b4b #111013;
+  }
+  .exhibit-bay {scroll-snap-align: center;}
+  .exhibit-open {width: 55%;}
+  .exhibit-heading {bottom: 20px;}
+  .exhibit-heading h2 {font-size: clamp(26px, 6vw, 34px);}
+  .exhibit-heading p {font-size: 12px;}
+  .exhibit-swipe {display: block; right: var(--gutter); bottom: 20px; color: #e0d8cc; font-size: 12px;}
+  .exhibit-swipe span {margin-left: 4px;}
+}

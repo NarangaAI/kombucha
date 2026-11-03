@@ -1,0 +1,76 @@
+/* Local exposures of the same stone and glass preserve their photographed texture. */
+.sr-world {
+  --stone-exposure: .68;
+  --bottle-exposure: .79;
+  --reflection-alpha: .43;
+  --beam-alpha: 0;
+}
+.sr-world.sr-aiming, .sr-world.sr-clone {
+  --stone-exposure: .31;
+  --bottle-exposure: .45;
+  --reflection-alpha: .17;
+}
+.sr-world:not(.sr-clone) .sr-item.is-lit,
+.sr-world.sr-clone .sr-item.is-selected {
+  --stone-exposure: .79;
+  --bottle-exposure: 1.16;
+  --beam-alpha: 1;
+  --reflection-alpha: .72;
+}
+
+:is(#collection, .sr-dialog) .sr-recess {
+  filter: brightness(var(--stone-exposure)) saturate(.86);
+  transition: filter .36s ease;
+}
+:is(#collection, .sr-dialog) .sr-bottle {
+  filter: brightness(var(--bottle-exposure)) contrast(1.09) saturate(1.04)
+          drop-shadow(2px 2px 2px #120a077d);
+  transition: filter .31s ease;
+}
+:is(#collection, .sr-dialog) .sr-reflect {
+  opacity: var(--reflection-alpha);
+  transition: opacity .42s ease;
+}
+.sr-world.sr-aiming .sr-wall {filter:brightness(.37) saturate(.75)}
+
+/* The light rotates a few degrees about the photographed ceiling fixture.
+   The material pass, along with a narrow grazing highlight, keeps the beam
+   visible on the stone without painting an opaque cone across the glass. */
+.sr-item { --lamp-x:50%; --beam-tilt:0deg; --spec-x:37%; --pool-x:50%; }
+.sr-item[data-index="0"] { --lamp-x:52.5% }
+.sr-item[data-index="1"] { --lamp-x:51% }
+.sr-item[data-index="4"] { --lamp-x:48% }
+:is(#collection, .sr-dialog) .sr-wash {
+  background: none;
+  mix-blend-mode: normal;
+  opacity: var(--beam-alpha);
+  transition: opacity .32s ease;
+}
+.sr-wash::before {
+  content:""; position:absolute; inset:0;
+  background: url("assets/showroom.webp") var(--crop-x) 34.1398% / var(--crop-w) 165.377856% no-repeat;
+  filter: brightness(1.48) contrast(1.04) saturate(.85);
+  mask-image: conic-gradient(from var(--beam-tilt) at var(--lamp-x) 5.7%,
+    transparent 0deg 161deg, #0003 167deg, #000b 173deg, black 178deg 182deg,
+    #000b 187deg, #0003 193deg, transparent 199deg);
+}
+.sr-wash::after {
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 3.6% .55% at var(--lamp-x) 5.7%, #fffef3 0 34%, #ffe5ba9c 70%, transparent),
+    radial-gradient(ellipse 12% 2.1% at var(--lamp-x) 5.7%, #fff4cc55, transparent 86%),
+    radial-gradient(ellipse 43% 1.65% at var(--pool-x) 97.6%, #fff0cb93, #fff2da5c 31%, transparent 92%);
+  mix-blend-mode: screen;
+}
+:is(#collection, .sr-dialog) .sr-glint {
+  background:
+    radial-gradient(ellipse 4% 53% at var(--spec-x) 40%, #fff8e88a, #fff7e647 37%, transparent 94%),
+    radial-gradient(ellipse 21% 11% at 50% 7%, #fff4d98c, transparent 82%),
+    radial-gradient(ellipse 13% 3.6% at 54% 96%, #ffedbd73, transparent 94%);
+  mix-blend-mode: soft-light;
+  opacity: var(--beam-alpha);
+  transition: opacity .38s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr-world *, .sr-world *::before, .sr-world *::after { transition-duration:0s !important; }
+}

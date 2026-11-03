@@ -1,0 +1,43 @@
+/* The camera travels over an opaque matte when it passes a photograph edge. */
+.sr-dialog .sr-viewport { background: #03040a; }
+.sr-dialog.sr-leaving { overflow: hidden; }
+.sr-dialog.sr-leaving :is(.sr-viewport, .sr-vignette) { position: fixed; top: 0; }
+.sr-clone {
+  inset: 0 auto auto 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  will-change: transform;
+}
+.sr-clone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, #03040a, transparent 5%, transparent 95%, #03040a);
+}
+.sr-clone .sr-vessel,
+.sr-clone .sr-contact-shadow { transform-origin: center bottom; }
+.sr-clone .sr-logo { visibility: hidden; }
+.sr-entered .sr-detail-logo { transition-delay: .40s; }
+.sr-entered .sr-back { transition-delay: .12s; }
+.sr-clone .sr-reflect { transform-origin: center top; }
+.sr-dialog .sr-vignette { background: none; overflow: hidden; transition: none; }
+.sr-camera-shade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 110%;
+  pointer-events: none;
+}
+.sr-camera-left {
+  right: 100%;
+  background: linear-gradient(to right, #03040a 0%, #03040af7 calc(100% - 110px), #03040a08 100%);
+}
+.sr-camera-right {
+  left: 0;
+  background: linear-gradient(to right, #03040a08, #03040aed 110px, #03040a 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr-clone { will-change: auto; }
+}
