@@ -4,11 +4,11 @@
 
   // Pixel coordinates of the shelf openings in the 1672 by 941 showroom photograph.
   const products = [
-    { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요.' },
-    { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요.' },
-    { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요.' },
-    { id:'strawberry', name:'딸기맛', en:'Strawberry', line:'프로틴', left:1044, right:1258, accent:'#ffcec0', paper:'#e8d8b8', lid:'#c97158', kcal:19, story:'콤부차에 딸기농축분말 11%와 분리유청단백(WPI)을 담았어요.' },
-    { id:'blueberry', name:'블루베리맛', en:'Blueberry', line:'프로틴', left:1357, right:1576, accent:'#d8dded', paper:'#e2d1b0', lid:'#29344b', kcal:19, story:'콤부차에 블루베리농축분말 11%와 분리유청단백(WPI)을 담았어요.' }
+    { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요' },
+    { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요' },
+    { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요' },
+    { id:'strawberry', name:'딸기맛', en:'Strawberry', line:'프로틴', left:1044, right:1258, accent:'#ffcec0', paper:'#e8d8b8', lid:'#c97158', kcal:19, story:'콤부차에 딸기농축분말 11%와 분리유청단백(WPI)을 담았어요' },
+    { id:'blueberry', name:'블루베리맛', en:'Blueberry', line:'프로틴', left:1357, right:1576, accent:'#d8dded', paper:'#e2d1b0', lid:'#29344b', kcal:19, story:'콤부차에 블루베리농축분말 11%와 분리유청단백(WPI)을 담았어요' }
   ];
   const sectionNumber = index => String(index + 1).padStart(2,'0');
 
@@ -52,7 +52,7 @@
       <a class="sr-logo" href="#home" aria-label="웰니스 프로바이오틱스 홈"><img class="brand-logo" src="assets/wellness-logo-light.svg" alt="Wellness Probiotics" width="178" height="40"></a>
       <div class="sr-folio"><span class="sr-eyebrow">제품소개</span>
         <h2 id="collection-title" lang="en">The <em>Wellness</em> collection</h2>
-        <p>다섯 가지 맛의 콤부차 <i></i><span class="sr-desktop-hint">제품을 선택해 맛을 확인하세요.</span><span class="sr-touch-hint">제품을 눌러 맛을 확인하세요.</span></p>
+        <p>다섯 가지 맛의 콤부차 <i></i><span class="sr-desktop-hint">제품을 선택해 맛을 확인하세요</span><span class="sr-touch-hint">제품을 눌러 맛을 확인하세요</span></p>
       </div>
       <a class="sr-next" href="#about">콤부차 소개 <span aria-hidden="true">↓</span></a>
     </div></div>`;

@@ -108,7 +108,7 @@
     event.preventDefault();
     const message = enquiryText.value.trim();
     if (!message) {
-      enquiryText.setCustomValidity('문의 내용을 입력해 주세요.');
+      enquiryText.setCustomValidity('문의 내용을 입력해 주세요');
       enquiryText.reportValidity();
       return;
     }
@@ -117,11 +117,11 @@
     const status = event.currentTarget.querySelector('.copy-status');
     try {
       await navigator.clipboard.writeText(draft);
-      status.textContent = '관심 제품과 문의 내용을 복사했어요.';
+      status.textContent = '관심 제품과 문의 내용을 복사했어요';
     } catch {
       enquiryText.focus();
       enquiryText.select();
-      status.textContent = '문의 내용을 선택했어요. 기기의 복사 기능을 이용해 주세요.';
+      status.textContent = '선택된 문의 내용을 기기의 복사 기능으로 복사해 주세요';
     }
   });
 })();
