@@ -30,6 +30,10 @@
   function measure(state) {
     const live = world.getBoundingClientRect();
     const source = state.item.getBoundingClientRect();
+    // Frame the product from the shelf floor, independently of the lowered ceiling.
+    const caseScale = Number(getComputedStyle(world).getPropertyValue('--case-scale')) || 1;
+    const framingHeight = source.height / caseScale;
+    const startY = source.bottom - framingHeight / 2;
     const roomBox = room.getBoundingClientRect();
     const width = viewport.clientWidth;
     const height = viewport.clientHeight;
@@ -40,10 +44,10 @@
     const clip = [roomBox.top, width - roomBox.right, height - roomBox.bottom, roomBox.left]
       .map(n => Math.max(0, n));
     state.frame = {
-      localX: startX - live.left, localY: source.top - live.top + source.height / 2,
-      startX, startY: source.top + source.height / 2,
+      localX: startX - live.left, localY: startY - live.top,
+      startX, startY,
       endX, endY: height * (mobile.matches ? .305 : .47),
-      zoom: Math.min(height * (mobile.matches ? .575 : 1.07) / source.height,
+      zoom: Math.min(height * (mobile.matches ? .575 : 1.07) / framingHeight,
         width * (mobile.matches ? .76 : .46) / source.width),
       nicheWidth: source.width,
       pan: Math.max(-1, Math.min(1, (endX - startX) / (width * .4))),

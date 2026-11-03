@@ -21,11 +21,38 @@
   position: absolute;
   inset: 0;
 }
-.sr-world { isolation: isolate; overflow: hidden; color: #f6f5f1; }
+.sr-world {
+  isolation: isolate; overflow: hidden; color: #f6f5f1;
+  --case-scale: .88;
+  --full-case-height: 60.4676%;
+  --case-height: calc(var(--full-case-height) * var(--case-scale));
+  --case-bottom: 26.0361%;
+}
 .sr-wall {
   background: url("assets/showroom.webp") center center / 100% 100% no-repeat;
   filter: brightness(.52) saturate(.73);
   transition: filter .55s;
+}
+/* Sample the stone above the cases and the cases themselves separately.
+   The floor below row 696 stays at its original position in the 941px photo. */
+.sr-wall::before, .sr-wall::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  background-image: inherit;
+  background-repeat: no-repeat;
+}
+.sr-wall::before {
+  top: 0;
+  height: calc(100% - var(--case-bottom) - var(--case-height));
+  background-size: 100% 740.945%;
+  background-position: center top;
+}
+.sr-wall::after {
+  bottom: var(--case-bottom);
+  height: var(--case-height);
+  background-size: 100% 165.377856%;
+  background-position: center 34.1398%;
 }
 .sr-floor { pointer-events: none; }
 .sr-floor::after {
@@ -39,9 +66,9 @@
   position: absolute;
   display: block;
   left: var(--left);
-  top: 13.4963%;
+  bottom: var(--case-bottom);
   width: var(--w);
-  height: 60.4676%;
+  height: var(--case-height);
   padding: 0;
   margin: 0;
   color: #f4f2ec;
@@ -64,12 +91,12 @@
   transition: opacity .32s;
 }
 .sr-contact-shadow {
-  position: absolute; left: 10%; right: 10%; bottom: 1%; height: 4.5%;
+  position: absolute; left: 10%; right: 10%; bottom: calc(1% / var(--case-scale)); height: calc(4.5% / var(--case-scale));
   background: radial-gradient(ellipse, #060505e6 4%, #120d0ac4 35%, transparent 68%);
   filter: blur(2px);
 }
 .sr-vessel {
-  position: absolute; bottom: 2.8%; height: var(--size); width: 94%; left: 3%;
+  position: absolute; bottom: calc(2.8% / var(--case-scale)); height: var(--size); width: 94%; left: 3%;
   display: block;
 }
 .sr-bottle,.sr-reflect img {
@@ -83,13 +110,13 @@
   pointer-events: none; opacity: .22; transition: opacity .32s;
 }
 .sr-reflect {
-  pointer-events: none; position: absolute; top: 119.7%; width: 94%; left: 3%; height: var(--size);
+  pointer-events: none; position: absolute; top: calc(100% + 19.7% / var(--case-scale)); width: 94%; left: 3%; height: var(--size);
   opacity: .54; mask: linear-gradient(#000 0%, #000d 18%, #0007 52%, transparent 87%);
   transition: opacity .4s;
 }
 .sr-reflect img { transform: scaleY(-1) scaleX(1.015); filter: blur(2px) brightness(.79) saturate(1.25); }
 .sr-tag {
-  pointer-events: none; position: absolute; top: 100.5%; left: -25%; width: 150%;
+  pointer-events: none; position: absolute; top: calc(100% + .5% / var(--case-scale)); left: -25%; width: 150%;
   opacity: 0; text-shadow: 0 1px 5px black, 0 0 12px black;
   display: grid; justify-items:center; font: 400 14px/1.12 var(--sans);
   transition: opacity .23s, transform .23s; transform: translateY(3px);
@@ -163,23 +190,25 @@
 .sr-disclosure {margin-top:20px;font-size:10px;color:#a5a1a6}
 @media (max-width:760px), (max-aspect-ratio:1/1) and (max-width:1050px) {
   .sr-room {height:clamp(545px,100svh,1140px)}
+  .sr-world {--full-case-height:29%}
   .sr-wall {
     background:linear-gradient(110deg,#05061052,#03030c87 51%,#02030a99),url("assets/basalt-mobile.webp") center / cover no-repeat;
     filter:brightness(.62) saturate(.55);
   }
+  .sr-wall::before, .sr-wall::after {content:none}
   .sr-floor {top:75%;background:linear-gradient(#020206c9,#04051088 40%,#020207ee),url("assets/showroom.webp") 50% 100% / 100% 495% no-repeat}
   .sr-floor::after {inset:-8% 0 auto;height:14%;background:linear-gradient(transparent,#040409d9,transparent);filter:blur(3px)}
-  .sr-item {width:23.3%;height:29%;top:10.2%}
+  .sr-item {width:23.3%;bottom:60.8%}
   .sr-item[data-index="0"] {left:19%}
   .sr-item[data-index="1"] {left:57.7%}
-  .sr-item:nth-of-type(n+3) {top:43.3%}
+  .sr-item:nth-of-type(n+3) {bottom:27.7%}
   .sr-item[data-index="2"] {left:5.3%}
   .sr-item[data-index="3"] {left:38.35%}
   .sr-item[data-index="4"] {left:71.4%}
   .sr-recess {box-shadow:inset 0 0 3px #03040abf}
-  .sr-reflect {top:121%}
+  .sr-reflect {top:calc(100% + 21% / var(--case-scale))}
   .sr-item:is([data-index="0"],[data-index="1"]) .sr-reflect {display:none}
-  .sr-tag {opacity:.83;transform:none;font-size:clamp(8px,1.75vw,12px);top:100.8%;white-space:nowrap}
+  .sr-tag {opacity:.83;transform:none;font-size:clamp(8px,1.75vw,12px);top:calc(100% + .8% / var(--case-scale));white-space:nowrap}
   .sr-tag small {display:none}
   .sr-folio {bottom:5.1%;left:5.3%}
   .sr-folio h2 {font-size:clamp(30px,8.4vw,64px)}
