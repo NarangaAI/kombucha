@@ -1,5 +1,5 @@
-/* The display case and mirror floor share one photographic background.
-   Each recess samples its exact rectangle from that plate for local relighting. */
+/* The three bays use x=52..992 of the original 1672px wall photograph.
+   Each recess still samples the original plate, including its own ceiling light. */
 #collection {
   position: relative;
   background: #030406;
@@ -23,7 +23,7 @@
 }
 .sr-world { isolation: isolate; overflow: hidden; color: #f6f5f1; }
 .sr-wall {
-  background: url("assets/showroom.webp") center center / 100% 100% no-repeat;
+  background: url("assets/showroom.webp") 7.103825% center / 177.87234% 100% no-repeat;
   filter: brightness(.52) saturate(.73);
   transition: filter .55s;
 }
@@ -167,19 +167,21 @@
     background:linear-gradient(110deg,#05061052,#03030c87 51%,#02030a99),url("assets/basalt-mobile.webp") center / cover no-repeat;
     filter:brightness(.62) saturate(.55);
   }
-  .sr-floor {top:75%;background:linear-gradient(#020206c9,#04051088 40%,#020207ee),url("assets/showroom.webp") 50% 100% / 100% 495% no-repeat}
+  .sr-floor {
+    top:75%;
+    background:
+      radial-gradient(ellipse 36% 108% at 50% 0%, #02020788, #040409e8 88%, #040409),
+      url("assets/showroom.webp") 50% 100% / 260% 495% no-repeat;
+  }
   .sr-floor::after {inset:-8% 0 auto;height:14%;background:linear-gradient(transparent,#040409d9,transparent);filter:blur(3px)}
-  .sr-item {width:23.3%;height:29%;top:10.2%}
-  .sr-item[data-index="0"] {left:19%}
-  .sr-item[data-index="1"] {left:57.7%}
-  .sr-item:nth-of-type(n+3) {top:43.3%}
-  .sr-item[data-index="2"] {left:5.3%}
-  .sr-item[data-index="3"] {left:38.35%}
-  .sr-item[data-index="4"] {left:71.4%}
+  .sr-item {width:min(35%,19svh);height:30%;top:9%;transform:translateX(-50%)}
+  .sr-item[data-index="0"] {left:27%}
+  .sr-item[data-index="1"] {left:73%}
+  .sr-item[data-index="2"] {left:50%;top:44%}
   .sr-recess {box-shadow:inset 0 0 3px #03040abf}
   .sr-reflect {top:121%}
   .sr-item:is([data-index="0"],[data-index="1"]) .sr-reflect {display:none}
-  .sr-tag {opacity:.83;transform:none;font-size:clamp(8px,1.75vw,12px);top:100.8%;white-space:nowrap}
+  .sr-tag {opacity:.9;transform:none;font-size:clamp(10px,2.15vw,14px);top:101%;white-space:nowrap}
   .sr-tag small {display:none}
   .sr-folio {bottom:5.1%;left:5.3%}
   .sr-folio h2 {font-size:clamp(30px,8.4vw,64px)}

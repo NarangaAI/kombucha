@@ -49,9 +49,15 @@ button {cursor:pointer}
   height:clamp(490px,calc(100svh - var(--header)),980px);
   background:#090a0b;
 }
-.hero-photo {
-  position:absolute; z-index:-2; right:0; top:0; height:100%; width:auto; max-width:none;
-  mask-image:linear-gradient(90deg,transparent 0%,#000 23%,#000 100%);
+.hero-studio {
+  position:absolute; z-index:-2; right:0; top:0; height:100%;
+  width:min(75%,calc((100svh - var(--header)) * 1.25),1250px);
+  background:url("assets/hero-slate.webp") left center / 157.73% 100% no-repeat;
+  mask-image:linear-gradient(90deg,transparent,#000 21%);
+}
+.hero-carton {position:absolute;left:22%;bottom:12%;width:42%;height:69%;container-type:size}
+@media (min-width:701px) and (max-width:950px) {
+  .hero-carton {left:30%;width:39%}
 }
 .hero::after {
   content:""; position:absolute; z-index:-1; inset:0; pointer-events:none;
@@ -141,7 +147,8 @@ footer {background:#111214}
   .top-nav a {padding:10px 0}
   .top-nav a::after {width:2.6em}
   .hero {height:clamp(570px,calc(100svh - var(--header)),820px);align-items:flex-end}
-  .hero-photo {width:100%;height:70%;object-fit:cover;object-position:81% center;mask-image:linear-gradient(#000 0% 76%,transparent)}
+  .hero-studio {width:100%;height:70%;mask-image:linear-gradient(#000 0% 76%,transparent)}
+  .hero-carton {left:6%;width:57%;height:72%}
   .hero::after {background:linear-gradient(0deg,#0a0b0c 0%,#0a0b0c55 33%,transparent 58%)}
   .hero-content {padding:0 0 clamp(52px,9vh,86px)}
   .hero h1 {font-size:clamp(44px,10.7vw,67px)}

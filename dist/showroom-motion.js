@@ -42,8 +42,8 @@
     state.frame = {
       localX: startX - live.left, localY: source.top - live.top + source.height / 2,
       startX, startY: source.top + source.height / 2,
-      endX, endY: height * (mobile.matches ? .305 : .47),
-      zoom: Math.min(height * (mobile.matches ? .575 : 1.07) / source.height,
+      endX, endY: height * (mobile.matches ? .28 : .465),
+      zoom: Math.min(height * (mobile.matches ? .5 : 1.02) / source.height,
         width * (mobile.matches ? .76 : .46) / source.width),
       nicheWidth: source.width,
       pan: Math.max(-1, Math.min(1, (endX - startX) / (width * .4))),

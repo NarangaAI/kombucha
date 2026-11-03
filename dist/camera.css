@@ -21,6 +21,7 @@
 .sr-clone .sr-logo { visibility: hidden; }
 .sr-entered .sr-detail-logo { transition-delay: .40s; }
 .sr-entered .sr-back { transition-delay: .12s; }
+.sr-detail-visible .sr-clone { will-change: auto; }
 .sr-clone .sr-reflect { transform-origin: center top; }
 .sr-dialog .sr-vignette { background: none; overflow: hidden; transition: none; }
 .sr-camera-shade {

@@ -1,0 +1,80 @@
+/* Front photographs stay intact; the other two visible faces are folded stock. */
+.sr-vessel, .sr-reflect {container-type:size}
+.carton-mount {
+  position:absolute;
+  display:block;
+  bottom:0;
+  left:50%;
+  width:min(80cqw, 64cqh);
+  aspect-ratio:544/784;
+  transform:translateX(-50%);
+  --depth:min(31cqw,25cqh);
+}
+.carton-model {
+  display:block;position:absolute;inset:0;
+  transform-style:preserve-3d;
+  transform-origin:50% 100%;
+  transform:perspective(max(2200px,900cqw)) rotateX(-9deg) rotateY(calc(var(--rest-yaw,-18deg) + var(--pack-turn,0deg)));
+  transition:transform .35s ease-out;
+}
+.sr-item[data-index="1"] {--rest-yaw:-15deg}
+.sr-item[data-index="2"] {--rest-yaw:-18deg}
+.carton-face,.carton-side,.carton-lid {display:block;position:absolute;backface-visibility:hidden}
+.carton-face::before,.carton-side::before,.carton-lid::before {
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:#100c08;opacity:calc(1 - var(--pack-exposure,.93));
+  transition:opacity .32s ease;
+}
+.carton-face {
+  inset:0;
+  background:var(--paper);
+  transform:translateZ(.07px);
+}
+.carton-face::after {
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 85% 66% at var(--spec-x,38%) -4%,color-mix(in srgb,var(--accent,#ffeac7) 33%,transparent),transparent 85%),
+    linear-gradient(106deg,#ffe8bd0c,transparent 35%,#2417091a 96%),
+    linear-gradient(180deg,transparent 13%,#170e0645 100%);
+  box-shadow:inset 0 1px 1px #fffcdf8c,inset 1px 0 1px #f8e4b74d,inset -1px 0 1px #45342455;
+}
+.carton-side {
+  left:100%;top:0;width:var(--depth);height:100%;
+  transform-origin:left;transform:rotateY(90deg);
+  background:
+    linear-gradient(90deg,#251c0e26,transparent 9%,#100e0b21 88%,#120f0a44),
+    linear-gradient(175deg,#322a2155,#1c18178c),
+    linear-gradient(160deg,var(--paper) 0 35%,color-mix(in srgb,var(--paper) 41%,#eeebd5) 35.3% 76%,var(--paper) 76.4%);
+  box-shadow:inset 1px 0 #fff5cd75,inset -1px 0 #221e183b;
+}
+.carton-side::after {
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 69%,#382b1317 70%,transparent 72%) top/100% 12% no-repeat;
+}
+.carton-lid {
+  left:0;bottom:100%;width:100%;height:var(--depth);
+  transform-origin:bottom;transform:rotateX(90deg);
+  background:
+    linear-gradient(180deg,#fffadc44,transparent 17%,#fff9da29 82%,#62553b45 84%,#fff7d240 87%),
+    linear-gradient(115deg,color-mix(in srgb,var(--paper) 80%,#fffbe3),var(--paper));
+  box-shadow:inset 0 0 0 1px #c8bd9170;
+}
+:is(#collection,.sr-dialog) .carton-face img.sr-bottle {
+  position:static;display:block;width:100%;height:100%;object-fit:fill;
+  transform:none;filter:none;opacity:1;border:0;
+}
+.hero-carton .sr-bottle {width:100%;height:100%;display:block}
+.sr-vessel .carton-mount::before,.hero-carton .carton-mount::before {
+  content:"";position:absolute;left:-9%;width:127%;height:6%;bottom:-1.4%;
+  background:radial-gradient(ellipse,#080703ee 12%,#080704b3 49%,transparent 74%);
+  transform:skewX(-17deg);filter:blur(1px);
+}
+.sr-item .sr-contact-shadow {left:12%;right:9%;bottom:1.3%;height:3.2%;opacity:.86}
+.carton-mirror {
+  position:absolute;inset:0;display:block;transform:scaleY(-1);
+  filter:blur(1.25px) brightness(.66) saturate(.78);
+}
+.hero-carton .carton-mount {width:min(90cqw,64cqh);--depth:min(35cqw,25cqh);--rest-yaw:-18deg;--pack-exposure:.91}
+@media (prefers-reduced-motion: reduce) {
+  .carton-model,.carton-mount {transition:none}
+}
