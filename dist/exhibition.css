@@ -1,5 +1,5 @@
 .exhibition {
-  --wall-height: clamp(475px, 43vw, 750px);
+  --floor-height: clamp(128px, 11.5vw, 245px);
   position: relative;
   isolation: isolate;
   background: #05060a;
@@ -14,20 +14,26 @@
 }
 .exhibit-bay {
   position: relative;
-  height: var(--wall-height);
+  display: grid;
+  /* The photographed opening runs from row 127 to 696 of the 941px plate.
+     Let the framed document and its clearances set the middle track's height. */
+  grid-template-rows: 127fr 569fr var(--floor-height);
   isolation: isolate;
   /* Each bay shows a 313px slice of the 1672px wall photo. */
   --slice: calc(100% * var(--slice-start) / (1672 - 313));
   --crop-x: calc(100% * var(--opening-x) / (1672 - var(--opening-width)));
   --crop-width: calc(100% * 1672 / var(--opening-width));
+  /* Keep the original reflective floor deep enough for the labels and heading. */
+  background: linear-gradient(#05060983, #05060983),
+    url("assets/showroom.webp") var(--slice) bottom / 534.1853% calc(var(--floor-height) * 941 / 245) no-repeat;
 }
-/* Adjoining 313px slices of the original showroom, including the continuous floor. */
+/* Above the floor, paint only the first 696 rows of the photograph. */
 .exhibit-bay::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 0 var(--floor-height);
   z-index: -2;
-  background: url("assets/showroom.webp") var(--slice) center / 534.1853% 100% no-repeat;
+  background: url("assets/showroom.webp") var(--slice) top / 534.1853% calc(100% * 941 / 696) no-repeat;
   filter: brightness(.5) saturate(.74);
 }
 .exhibit-bay:nth-child(1) { --slice-start: 56;   --opening-x: 101;  --opening-width: 217; }
@@ -39,25 +45,24 @@
   content: "";
   position: absolute;
   z-index: -1;
-  inset: 0;
+  inset: 0 0 var(--floor-height);
   pointer-events: none;
   background: radial-gradient(ellipse 26% 63% at 50% 25%, #ffefc945, transparent 86%),
-    url("assets/showroom.webp") var(--slice) center / 534.1853% 100% no-repeat;
-  clip-path: inset(15.7% 17% 26.8%);
-  mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 15.7%, transparent 139deg, #0009 158deg, #000 174deg 186deg, #0009 202deg, transparent 221deg);
+    url("assets/showroom.webp") var(--slice) top / 534.1853% calc(100% * 941 / 696) no-repeat;
+  clip-path: inset(21.2% 17% 1%);
+  mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 21.2%, transparent 139deg, #0009 158deg, #000 174deg 186deg, #0009 202deg, transparent 221deg);
   opacity: var(--spotlight, .12);
   transition: opacity .34s ease;
 }
 .exhibit-open {
   --cast-shadow: 0 2px 2px #0807068c, 1px 4px 6px #0006;
-  position: absolute;
-  top: 13.5%;
-  left: calc(100% * (var(--opening-x) - var(--slice-start)) / 313);
+  position: relative;
+  grid-row: 2;
+  margin-left: calc(100% * (var(--opening-x) - var(--slice-start)) / 313);
   display: grid;
   place-items: end center;
   width: calc(100% * var(--opening-width) / 313);
-  height: 60.47%;
-  padding: 0 0 8.6%;
+  padding: 13% 0 8.6%;
   border: 0;
   background: none;
   color: inherit;
@@ -82,7 +87,7 @@
 }
 .exhibit-open .exhibit-frame {
   /* One frame size across the wall, with visible stone on both sides. */
-  width: min(calc(100% * 164 / var(--opening-width)), calc(var(--wall-height) * .39));
+  width: min(calc(100% * 164 / var(--opening-width)), 292.5px);
   transform-origin: center bottom;
   transform: scale(var(--frame-zoom, 1));
   filter: brightness(var(--paper-light, .81));
@@ -156,14 +161,15 @@ html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
     justify-items: center;
   }
   .exhibit-bay {
+    display: block;
+    background: none;
     grid-column: span 2;
     width: min(80%, 185px);
-    height: auto;
-    aspect-ratio: .61;
   }
   .exhibit-bay:nth-child(1) {grid-column: 2 / span 2; justify-self: start;}
   .exhibit-bay:nth-child(2) {grid-column: 4 / span 2; justify-self: end;}
   .exhibit-bay::before, .exhibit-bay::after {
+    inset: 0;
     background: url("assets/showroom.webp") var(--crop-x) 34.1398% / var(--crop-width) 165.3779% no-repeat;
   }
   .exhibit-bay::before {filter: brightness(.74) saturate(.74);}
@@ -171,7 +177,7 @@ html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
     clip-path: inset(0);
     mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 6%, transparent 134deg, #000 165deg 195deg, transparent 226deg);
   }
-  .exhibit-open {inset: 0; width: 100%; height: 100%; padding-bottom: 13%;}
+  .exhibit-open {width: 100%; margin-left: 0; padding: 20% 0 13%;}
   .exhibit-open .exhibit-frame {width: 76%; padding: clamp(2px, .48vw, 5px);}
   .exhibit-label {top: calc(100% + 5px); gap: .38em; font-size: clamp(11px, 1.85vw, 15px);}
   .exhibit-heading {position: static; padding: 3px var(--gutter) clamp(22px, 5vw, 44px);}
