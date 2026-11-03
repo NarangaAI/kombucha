@@ -4,16 +4,16 @@
 
   // Pixel coordinates of the shelf openings in the 1672 by 941 showroom photograph.
   const products = [
-    { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, size:65, accent:'#ffd59b', paper:'#f6e734', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요.' },
-    { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, size:52, accent:'#ffabbd', paper:'#bcdfdc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요.' },
-    { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, size:49, accent:'#f2e9c4', paper:'#e2ecb7', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요.' },
-    { id:'grape', name:'그린 그레이프', en:'Green Grape', left:1044, right:1258, size:66, accent:'#b7d9bb', note:'청포도 · 머스캣', finish:'싱그러운 과즙 향', story:'청포도 과즙을 닮은 산미와 은은한 머스캣 향이 특징입니다.' },
-    { id:'hibiscus', name:'히비스커스', en:'Hibiscus', left:1357, right:1576, size:60, accent:'#ef9da8', note:'붉은 꽃잎 · 새콤함', finish:'잔잔한 꽃향', story:'히비스커스의 또렷한 산미 뒤로 옅은 꽃향이 이어집니다.' }
+    { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요.' },
+    { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요.' },
+    { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요.' },
+    { id:'grape', name:'그린 그레이프', en:'Green Grape', left:1044, right:1258, accent:'#b7d9bb', note:'청포도 · 머스캣', finish:'싱그러운 과즙 향', story:'청포도 과즙을 닮은 산미와 은은한 머스캣 향이 특징입니다.' },
+    { id:'hibiscus', name:'히비스커스', en:'Hibiscus', left:1357, right:1576, accent:'#ef9da8', note:'붉은 꽃잎 · 새콤함', finish:'잔잔한 꽃향', story:'히비스커스의 또렷한 산미 뒤로 옅은 꽃향이 이어집니다.' }
   ];
   const sectionNumber = index => String(index + 1).padStart(2,'0');
 
   function carton(product) {
-    return `<span class="carton-mount" style="--paper:${product.paper}">
+    return `<span class="carton-mount" style="--paper:${product.paper};--lid-paper:${product.lid};--print:url(assets/pack-${product.id}.webp)">
       <span class="carton-model">
         <span class="carton-side"></span><span class="carton-lid"></span>
         <span class="carton-face"><img class="sr-bottle" src="assets/pack-${product.id}.webp" width="544" height="784" alt="" draggable="false"></span>
@@ -34,7 +34,6 @@
       '--w:' + 100 * width / 1672 + '%',
       '--crop-w:' + 100 * 1672 / width + '%',
       '--crop-x:' + 100 * product.left / (1672 - width) + '%',
-      '--size:' + product.size + '%',
       '--glass:' + (pack ? 'none' : 'url(' + bottleImage + ')'),
       '--accent:' + product.accent
     ].join(';');
