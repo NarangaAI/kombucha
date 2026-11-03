@@ -1,12 +1,12 @@
 /* Measure from the whole set: the photographed openings differ slightly in width. */
 .sr-world {
   container-type: size;
-  --carton-width: min(9.65cqw, 21cqh);
+  --carton-width: min(8.55cqw, 18.6cqh);
   --size: calc(var(--carton-width) * 1.565);
 }
 
 @media (max-width:760px), (max-aspect-ratio:1/1) and (max-width:1050px) {
-  .sr-world { --carton-width: min(17.75cqw, 10cqh); }
+  .sr-world { --carton-width: min(15.7cqw, 8.85cqh); }
 }
 
 .sr-carton {
@@ -100,8 +100,8 @@
   position: absolute;
   inset: 0;
   background: var(--print) 98.5% center / 2400% 100% no-repeat;
-  mix-blend-mode: soft-light;
-  opacity: .32;
+  mix-blend-mode: var(--side-blend, soft-light);
+  opacity: var(--side-ink, .32);
 }
 
 .sr-carton .carton-lid {

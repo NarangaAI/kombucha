@@ -7,13 +7,14 @@
     { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요.' },
     { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요.' },
     { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요.' },
-    { id:'grape', name:'그린 그레이프', en:'Green Grape', left:1044, right:1258, accent:'#b7d9bb', note:'청포도 · 머스캣', finish:'싱그러운 과즙 향', story:'청포도 과즙을 닮은 산미와 은은한 머스캣 향이 특징입니다.' },
-    { id:'hibiscus', name:'히비스커스', en:'Hibiscus', left:1357, right:1576, accent:'#ef9da8', note:'붉은 꽃잎 · 새콤함', finish:'잔잔한 꽃향', story:'히비스커스의 또렷한 산미 뒤로 옅은 꽃향이 이어집니다.' }
+    { id:'strawberry', name:'딸기맛', en:'Strawberry', line:'프로틴', left:1044, right:1258, accent:'#ffcec0', paper:'#e8d8b8', lid:'#c97158', kcal:19, story:'콤부차에 딸기농축분말 11%와 분리유청단백(WPI)을 담았어요.' },
+    { id:'blueberry', name:'블루베리맛', en:'Blueberry', line:'프로틴', left:1357, right:1576, accent:'#d8dded', paper:'#e2d1b0', lid:'#29344b', kcal:19, story:'콤부차에 블루베리농축분말 11%와 분리유청단백(WPI)을 담았어요.' }
   ];
   const sectionNumber = index => String(index + 1).padStart(2,'0');
 
   function carton(product) {
-    return `<span class="carton-mount" style="--paper:${product.paper};--lid-paper:${product.lid};--print:url(assets/pack-${product.id}.webp)">
+    const edgeInk = product.line === '프로틴' ? '--side-blend:multiply;--side-ink:.78;' : '';
+    return `<span class="carton-mount" style="${edgeInk}--paper:${product.paper};--lid-paper:${product.lid};--print:url(assets/pack-${product.id}.webp)">
       <span class="carton-model">
         <span class="carton-side"></span><span class="carton-lid"></span>
         <span class="carton-face"><img class="sr-bottle" src="assets/pack-${product.id}.webp" width="544" height="784" alt="" draggable="false"></span>
@@ -22,29 +23,23 @@
   }
 
   function shelf(product, index) {
-    const pack = product.paper ? carton(product) : '';
-    const bottleImage = `assets/night-${product.id}.webp`;
-    const display = pack || `<img class="sr-bottle" src="${bottleImage}" alt="" draggable="false"><span class="sr-glint"></span>`;
-    const reflection = pack
-      ? `<span class="carton-mirror">${pack}</span>`
-      : `<img src="${bottleImage}" alt="" draggable="false">`;
+    const pack = carton(product);
     const width = product.right - product.left;
     const style = [
       '--left:' + 100 * product.left / 1672 + '%',
       '--w:' + 100 * width / 1672 + '%',
       '--crop-w:' + 100 * 1672 / width + '%',
       '--crop-x:' + 100 * product.left / (1672 - width) + '%',
-      '--glass:' + (pack ? 'none' : 'url(' + bottleImage + ')'),
       '--accent:' + product.accent
     ].join(';');
-    return `<button class="sr-item${pack ? ' sr-carton' : ''}" data-index="${index}" style="${style}" type="button" aria-haspopup="dialog" aria-label="${product.name} 상세 보기">
+    return `<button class="sr-item sr-carton" data-index="${index}" style="${style}" type="button" aria-haspopup="dialog" aria-label="${product.name} 상세 보기">
       <span class="sr-niche">
         <span class="sr-recess"></span>
         <span class="sr-wash"></span>
         <span class="sr-contact-shadow"></span>
-        <span class="sr-vessel">${display}</span>
+        <span class="sr-vessel">${pack}</span>
       </span>
-      <span aria-hidden="true" class="sr-reflect">${reflection}</span>
+      <span aria-hidden="true" class="sr-reflect"><span class="carton-mirror">${pack}</span></span>
       <span aria-hidden="true" class="sr-tag"><span>${product.en}</span><small>${product.name}</small></span>
     </button>`;
   }
@@ -76,16 +71,12 @@
     const product = products[index];
     dialog.style.setProperty('--accent', product.accent);
     const details = dialog.querySelector('.sr-details');
-    const title = product.paper ? '원데이 콜라겐 콤부차 · ' + product.name : product.name;
-    const notes = product.paper
-      ? `<div><dt>구성</dt><dd>5 g × 15포 (75 g)</dd></div><div><dt>1포 열량</dt><dd>${product.kcal} kcal</dd></div>`
-      : `<div><dt>향</dt><dd>${product.note}</dd></div><div><dt>마무리</dt><dd>${product.finish}</dd></div>`;
+    const title = `원데이 ${product.line || '콜라겐'} 콤부차 · ${product.name}`;
     details.innerHTML = `<p class="sr-eyebrow">${sectionNumber(index)} / 05</p>
       <h3 id="sr-detail-title"><span lang="en">${product.en}</span><small>${title}</small></h3>
       <p class="sr-story">${product.story}</p>
-      <dl class="sr-notes">${notes}</dl>
-      <a class="sr-contact" href="#contact">구매 및 문의 <span aria-hidden="true">↗</span></a>
-      ${product.paper ? '' : '<p class="sr-disclosure">제품과 맛 설명은 임시 시안입니다.</p>'}`;
+      <dl class="sr-notes"><div><dt>구성</dt><dd>5 g × 15포 (75 g)</dd></div><div><dt>1포 열량</dt><dd>${product.kcal} kcal</dd></div></dl>
+      <a class="sr-contact" href="#contact">구매 및 문의 <span aria-hidden="true">↗</span></a>`;
     const select = document.getElementById('enquiry-product');
     if (select) select.value = product.name;
   }
@@ -116,7 +107,7 @@
     const offset = Math.max(-1, Math.min(1, 2 * (event.clientX - box.left) / box.width - 1));
     item.style.setProperty('--beam-tilt', (-offset * 2.5) + 'deg');
     item.style.setProperty('--spec-x', (37 + offset * 9) + '%');
-    if (item.classList.contains('sr-carton')) item.style.setProperty('--pack-turn', (offset * 2.4) + 'deg');
+    item.style.setProperty('--pack-turn', (offset * 2.4) + 'deg');
     item.style.setProperty('--pool-x', (50 + offset * 8) + '%');
   }
 
