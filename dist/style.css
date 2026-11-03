@@ -74,7 +74,6 @@ button {cursor:pointer}
 }
 .rule-link:hover {color:#fff; border-color:#fff}
 .rule-link span {font:17px/1 var(--sans)}
-.hero-caption {position:absolute;right:var(--gutter);bottom:25px;font-size:11px;color:#c4c3be;text-shadow:0 1px 5px #000}
 .about {background:#151617}
 .brew-layout {
   display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
@@ -170,7 +169,6 @@ footer {background:#111214}
   .top-nav.is-open {display:flex;flex-direction:column;align-items:stretch;gap:2px}
   .top-nav a {padding:10px 0}
   .top-nav a::after {width:2.6em}
-  .hero-caption {right:var(--gutter);bottom:14px;font-size:10px}
   .brew-layout {grid-template-columns:minmax(0,1fr);grid-template-areas:"intro" "film" "facts";gap:20px;padding-block:44px}
   .brew-intro h2 {margin-block:4px 12px}
 
