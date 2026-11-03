@@ -1,8 +1,9 @@
 .exhibition {
-  --floor-height: clamp(128px, 11.5vw, 245px);
+  --floor-height: clamp(86px, 6vw, 120px);
   position: relative;
   isolation: isolate;
-  background: #05060a;
+  background: linear-gradient(#08090cc4, #08090c99),
+    #05060a url("assets/basalt.webp") center / cover;
   color: #f2eee7;
 }
 .exhibit-wall {
@@ -11,6 +12,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  mask-image: linear-gradient(to bottom, transparent, #000 min(2vw, 24px));
 }
 .exhibit-bay {
   position: relative;
@@ -23,7 +25,7 @@
   --slice: calc(100% * var(--slice-start) / (1672 - 313));
   --crop-x: calc(100% * var(--opening-x) / (1672 - var(--opening-width)));
   --crop-width: calc(100% * 1672 / var(--opening-width));
-  /* Keep the original reflective floor deep enough for the labels and heading. */
+  /* Continue the original reflective floor beneath the captions. */
   background: linear-gradient(#05060983, #05060983),
     url("assets/showroom.webp") var(--slice) bottom / 534.1853% calc(var(--floor-height) * 941 / 245) no-repeat;
 }
@@ -54,8 +56,7 @@
   opacity: var(--spotlight, .12);
   transition: opacity .34s ease;
 }
-.exhibit-open {
-  --cast-shadow: 0 2px 2px #0807068c, 1px 4px 6px #0006;
+.exhibit-open, .exhibit-pending {
   position: relative;
   grid-row: 2;
   margin-left: calc(100% * (var(--opening-x) - var(--slice-start)) / 313);
@@ -66,6 +67,9 @@
   border: 0;
   background: none;
   color: inherit;
+}
+.exhibit-open {
+  --cast-shadow: 0 2px 2px #0807068c, 1px 4px 6px #0006;
   cursor: zoom-in;
 }
 .exhibit-frame {
@@ -100,11 +104,14 @@
 }
 .exhibit-label {
   position: absolute;
-  inset: calc(100% + 14px) 0 auto;
+  inset: calc(100% + 14px) -16% auto;
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: .65em;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 1.4;
   font-size: clamp(13px, 1.04vw, 17px);
   font-weight: 600;
   text-shadow: 0 1px 5px #000;
@@ -119,16 +126,12 @@
   }
 }
 .exhibit-heading {
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
+  padding: clamp(30px, 3.2vw, 56px) var(--gutter) 0;
   text-shadow: 0 2px 12px #000;
 }
-.exhibit-heading {left: var(--gutter); bottom: 3.8%;}
 .exhibit-heading h2 {font-size: clamp(30px, 3vw, 54px); letter-spacing: -.05em; line-height: 1.18;}
-.exhibit-heading p {font-size: 13px; color: #d1cbc4; margin-top: 5px;}
 .exhibit-viewer {
-  --viewer-width: min(83vw, 530px, calc((100dvh - 95px) * .765));
+  --viewer-width: min(92vw, 640px, calc((100dvh - 80px) * .7));
   width: var(--viewer-width);
   max-width: none;
   max-height: none;
@@ -149,16 +152,16 @@ html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
 .exhibit-enlarged img {max-height: calc(100dvh - 95px); object-fit: contain; background: #eae4d6;}
 @media (max-width:760px), (max-aspect-ratio:1/1) and (max-width:1050px) {
   .exhibition {
-    display: grid;
     background: linear-gradient(110deg, #08090cb5, #0405098c 48%, #030408bc),
       url("assets/basalt-mobile.webp") center / cover no-repeat;
   }
   .exhibit-wall {
-    grid-row: 1;
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    row-gap: clamp(42px, 8vw, 78px);
-    padding: clamp(30px, 7vw, 68px) 1.2% clamp(40px, 6vw, 68px);
+    grid-auto-rows: 1fr;
+    row-gap: clamp(48px, 8vw, 78px);
+    padding: clamp(24px, 4.5vw, 42px) 1.2% clamp(58px, 8vw, 78px);
     justify-items: center;
+    mask-image: none;
   }
   .exhibit-bay {
     display: block;
@@ -177,10 +180,9 @@ html:has(.exhibit-viewer[open]) {overflow: hidden; scrollbar-gutter: stable;}
     clip-path: inset(0);
     mask-image: conic-gradient(from var(--lamp-angle, 0deg) at 50% 6%, transparent 134deg, #000 165deg 195deg, transparent 226deg);
   }
-  .exhibit-open {width: 100%; margin-left: 0; padding: 20% 0 13%;}
+  .exhibit-open, .exhibit-pending {width: 100%; margin-left: 0; padding: 20% 0 13%;}
+  .exhibit-pending {height: 100%;}
   .exhibit-open .exhibit-frame {width: 76%; padding: clamp(2px, .48vw, 5px);}
-  .exhibit-label {top: calc(100% + 5px); gap: .38em; font-size: clamp(11px, 1.85vw, 15px);}
-  .exhibit-heading {position: static; padding: 3px var(--gutter) clamp(22px, 5vw, 44px);}
+  .exhibit-label {inset: calc(100% + 6px) -7% auto; gap: .32em; font-size: clamp(11px, 1.85vw, 15px);}
   .exhibit-heading h2 {font-size: clamp(26px, 6vw, 34px);}
-  .exhibit-heading p {font-size: 12px;}
 }

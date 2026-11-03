@@ -73,8 +73,11 @@
     button.addEventListener('click', () => {
       const title = button.getAttribute('aria-label').replace(' 크게 보기', '');
       const image = exhibitViewer.querySelector('img');
-      image.src = button.querySelector('img').src;
-      image.alt = title;
+      const documentPhoto = button.querySelector('img');
+      image.width = documentPhoto.naturalWidth || documentPhoto.width;
+      image.height = documentPhoto.naturalHeight || documentPhoto.height;
+      image.src = documentPhoto.src;
+      image.alt = documentPhoto.alt;
       document.getElementById('exhibit-viewer-title').textContent = title;
       exhibitViewer.showModal();
     });
