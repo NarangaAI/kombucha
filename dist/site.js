@@ -5,7 +5,7 @@
   function setMenu(open) {
     menu.setAttribute('aria-expanded', String(open));
     nav.classList.toggle('is-open', open);
-    menu.querySelector('span').textContent = open ? '닫기' : '메뉴';
+    menu.querySelector('span').textContent = open ? 'Close' : 'Menu';
   }
   menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') === 'false'));
   nav.addEventListener('click', event => {
@@ -20,7 +20,7 @@
       menu.focus();
     }
   });
-  window.matchMedia('(max-width:700px)').addEventListener('change', () => setMenu(false));
+  window.matchMedia('(max-width:1000px)').addEventListener('change', () => setMenu(false));
 
   const navLinks = [...nav.querySelectorAll('a')];
   const sections = [...document.querySelectorAll('main > section')];
@@ -46,20 +46,26 @@
   window.addEventListener('resize', scheduleMark);
   markSection();
 
-  const brewVideo = document.querySelector('.brew-video');
-  let videoInView = false;
-  function syncVideo() {
-    if (videoInView && !document.hidden) {
-      brewVideo.play().catch(() => {});
-    } else {
-      brewVideo.pause();
+  const backgroundVideos = [...document.querySelectorAll('.brew-video, .company-video')];
+  const videosInView = new Set();
+  function syncVideos() {
+    for (const video of backgroundVideos) {
+      if (videosInView.has(video) && !document.hidden) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
     }
   }
-  new IntersectionObserver(([entry]) => {
-    videoInView = entry.isIntersecting;
-    syncVideo();
-  }).observe(brewVideo);
-  document.addEventListener('visibilitychange', syncVideo);
+  const videoObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) videosInView.add(entry.target);
+      else videosInView.delete(entry.target);
+    }
+    syncVideos();
+  });
+  for (const video of backgroundVideos) videoObserver.observe(video);
+  document.addEventListener('visibilitychange', syncVideos);
 
   const exhibitViewer = document.getElementById('exhibit-viewer');
   for (const button of document.querySelectorAll('.exhibit-open')) {
@@ -71,7 +77,7 @@
     });
     button.addEventListener('pointerleave', () => button.parentElement.style.removeProperty('--lamp-angle'));
     button.addEventListener('click', () => {
-      const title = button.getAttribute('aria-label').replace(' 크게 보기', '');
+      const title = button.querySelector('.exhibit-label > span').innerText.replace(/\s+/g, ' ').trim();
       const image = exhibitViewer.querySelector('img');
       const documentPhoto = button.querySelector('img');
       image.width = documentPhoto.naturalWidth || documentPhoto.width;
@@ -89,7 +95,7 @@
     if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) exhibitViewer.close();
   });
 
-  for (const name of ['shop','enquiry']) {
+  for (const name of ['enquiry']) {
     const opener = document.getElementById(name + '-open');
     const dialog = document.getElementById(name + '-dialog');
     opener.addEventListener('click', () => dialog.showModal());
@@ -102,6 +108,7 @@
   }
 
   const form = document.getElementById('enquiry-form');
+  const emailField = form.elements.email;
   const messageField = form.elements.message;
   const fields = form.querySelector('fieldset');
   const submit = form.querySelector('button[type="submit"]');
@@ -112,27 +119,40 @@
     if (checking || fields.disabled) return;
     checking = true;
     submit.disabled = true;
-    status.textContent = '접수 가능 여부를 확인하고 있습니다';
+    status.textContent = 'Checking whether inquiries can be submitted';
     try {
       const response = await fetch(form.action + '/status', {cache:'no-store', signal:AbortSignal.timeout(8000)});
       if (!response.ok) throw new Error();
       const {available} = await response.json();
       submit.disabled = available !== true;
-      status.textContent = submit.disabled ? '현재 이메일 문의 접수를 준비 중입니다' : '';
+      status.textContent = submit.disabled ? 'Email inquiries are not yet available' : '';
     } catch {
-      status.textContent = '접수 상태를 확인할 수 없습니다\n잠시 후 다시 열어 주세요';
+      status.textContent = 'Unable to check inquiry availability\nPlease reopen this form shortly';
     } finally {
       checking = false;
     }
   });
 
-  messageField.addEventListener('input', () => messageField.setCustomValidity(''));
+  for (const field of [emailField, messageField]) {
+    field.addEventListener('input', () => field.setCustomValidity(''));
+    field.addEventListener('invalid', () => {
+      if (field.validity.valueMissing) {
+        field.setCustomValidity(field === emailField ? 'Please enter your email address' : 'Please enter your inquiry');
+      } else if (field.validity.typeMismatch || field.validity.badInput) {
+        field.setCustomValidity('Please enter a valid email address');
+      } else if (field.validity.tooLong) {
+        field.setCustomValidity(field === emailField
+          ? 'Please keep your email address within 254 characters'
+          : 'Please keep your inquiry within 4,000 characters');
+      }
+    });
+  }
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (submit.disabled) return;
     const message = messageField.value.trim();
     if (!message) {
-      messageField.setCustomValidity('문의 내용을 입력해 주세요');
+      messageField.setCustomValidity('Please enter your inquiry');
       messageField.reportValidity();
       return;
     }
@@ -140,7 +160,7 @@
     data.message = message;
     fields.disabled = true;
     submit.disabled = true;
-    status.textContent = '문의를 보내고 있습니다';
+    status.textContent = 'Sending your inquiry';
     try {
       const response = await fetch(form.action, {
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data),
@@ -148,16 +168,16 @@
       });
       if (response.ok && (await response.json()).ok === true) {
         form.reset();
-        status.textContent = '문의가 접수되었습니다\n입력하신 이메일로 답변드리겠습니다';
+        status.textContent = 'Your inquiry has been received\nWe will reply to the email address you provided';
       } else if (response.status === 429) {
-        status.textContent = '잠시 후 다시 보내 주세요';
+        status.textContent = 'Please try sending your inquiry again shortly';
       } else if (response.status === 400) {
-        status.textContent = '이메일 주소와 문의 내용을 확인해 주세요';
+        status.textContent = 'Please check your email address and inquiry';
       } else {
-        status.textContent = '지금은 문의를 보낼 수 없습니다\n잠시 후 다시 시도해 주세요';
+        status.textContent = 'Your inquiry cannot be sent right now\nPlease try again shortly';
       }
     } catch {
-      status.textContent = '전송 결과를 확인할 수 없습니다\n네트워크 연결을 확인해 주세요';
+      status.textContent = 'Unable to confirm whether your inquiry was sent\nPlease check your network connection';
     } finally {
       fields.disabled = false;
       submit.disabled = false;

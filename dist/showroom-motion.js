@@ -113,15 +113,7 @@
     if (scrollX !== state.scrollX || scrollY !== state.scrollY) {
       window.scrollTo({left:state.scrollX, top:state.scrollY, behavior:'instant'});
     }
-    if (state.contact) {
-      const target = document.getElementById('contact');
-      target.setAttribute('tabindex','-1');
-      target.focus({preventScroll:true});
-      location.hash = 'contact';
-      target.scrollIntoView({behavior:reduced.matches ? 'instant' : 'smooth'});
-    } else {
-      state.item.focus({preventScroll:true});
-    }
+    state.item.focus({preventScroll:true});
   }
 
   function run(state) {
@@ -182,11 +174,10 @@
     run(state);
   }
 
-  function close(contact = false) {
+  function close() {
     const state = current;
     if (!state || state.closing) return;
     state.closing = true;
-    state.contact = contact;
     state.returnStart = state.progress;
     // On a scrolled mobile detail, pin the stage at its current visual offset.
     // The camera carries that offset back to zero instead of jumping to the top.
@@ -204,9 +195,6 @@
   });
   dialog.addEventListener('cancel', event => {event.preventDefault(); close();});
   back.addEventListener('click', () => close());
-  dialog.addEventListener('click', event => {
-    if (event.target.closest('.sr-contact')) {event.preventDefault(); close(true);}
-  });
   window.addEventListener('resize', () => {
     if (current) {measure(current); paint(current);}
   });

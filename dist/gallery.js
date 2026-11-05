@@ -4,16 +4,65 @@
 
   // Pixel coordinates of the shelf openings in the 1672 by 941 showroom photograph.
   const products = [
-    { id:'mango', name:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'달콤한 망고 향에 콤부차의 새콤한 끝맛을 더했어요' },
-    { id:'lemon', name:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:20, story:'레몬의 상큼한 향과 콤부차의 산뜻한 산미를 함께 즐겨 보세요' },
-    { id:'banana', name:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'부드러운 바나나 향 뒤로 발효차 특유의 새콤함이 남아요' },
-    { id:'strawberry', name:'딸기맛', en:'Strawberry', line:'프로틴', left:1044, right:1258, accent:'#ffcec0', paper:'#e8d8b8', lid:'#c97158', kcal:19, story:'콤부차에 딸기농축분말 11%와 분리유청단백(WPI)을 담았어요' },
-    { id:'blueberry', name:'블루베리맛', en:'Blueberry', line:'프로틴', left:1357, right:1576, accent:'#d8dded', paper:'#e2d1b0', lid:'#29344b', kcal:19, story:'콤부차에 블루베리농축분말 11%와 분리유청단백(WPI)을 담았어요' }
+    { id:'mango', name:'Mango', inquiryValue:'망고맛', en:'Mango', left:101, right:318, accent:'#ffd59b', paper:'#f6e734', lid:'#edd4c5', kcal:15, story:'Sweet mango aromas with a tangy kombucha finish' },
+    { id:'lemon', name:'Lemon', inquiryValue:'레몬맛', en:'Lemon', left:419, right:631, accent:'#ffabbd', paper:'#bcdfdc', lid:'#a8dddc', kcal:15, story:'Enjoy bright lemon aromas with the refreshing acidity of kombucha' },
+    { id:'banana', name:'Banana', inquiryValue:'바나나맛', en:'Banana', left:731, right:944, accent:'#f2e9c4', paper:'#e2ecb7', lid:'#d4e6c3', kcal:15, story:'Smooth banana aromas give way to the distinctive tang of fermented tea' },
+    { id:'strawberry', name:'Strawberry', inquiryValue:'딸기맛', en:'Strawberry', line:'Protein', left:1044, right:1258, accent:'#ffcec0', paper:'#e8d8b8', lid:'#c97158', kcal:19, story:'Kombucha blended with 11% strawberry concentrate powder and whey protein isolate (WPI)' },
+    { id:'blueberry', name:'Blueberry', inquiryValue:'블루베리맛', en:'Blueberry', line:'Protein', left:1357, right:1576, accent:'#d8dded', paper:'#e2d1b0', lid:'#29344b', kcal:19, story:'Kombucha blended with 11% blueberry concentrate powder and whey protein isolate (WPI)' }
   ];
   const sectionNumber = index => String(index + 1).padStart(2,'0');
 
+  // The supplied nutrition label applies to the three collagen flavours only.
+  const collagenNutrition = [
+    ['Sodium', '210 mg', '5%'], ['Carbohydrate', '4 g', '1%'],
+    ['Sugars', '0 g', '0%'], ['Fat', '0 g', '0%'],
+    ['Trans Fat', '0 g', '0%'], ['Saturated Fat', '0 g', '0%'],
+    ['Cholesterol', '0 mg', '0%'], ['Protein', '0 g', '0%']
+  ];
+  const proteinNutrition = [
+    ['Sodium', '190 mg', '10%'], ['Carbohydrate', '3 g', '1%'],
+    ['Sugars', '0 g', '0%'], ['Fat', '0 g', '0%'],
+    ['Trans Fat', '0 g', '—'], ['Saturated Fat', '0 g', '0%'],
+    ['Cholesterol', '0 mg', '0%'], ['Protein', '1 g', '2%']
+  ];
+
+  function nutrition(product) {
+    const nutrients = product.line === 'Protein' ? proteinNutrition : collagenNutrition;
+    return `<section class="sr-nutrition" lang="en" aria-labelledby="sr-nutrition-title">
+      <h4 id="sr-nutrition-title">Nutrition Facts</h4>
+      <p class="sr-net-weight">Net weight 75 g · 5 g × 15 sticks</p>
+      <div class="sr-energy"><span>Per 1 stick (5 g)</span><strong>${product.kcal}<small>kcal</small></strong></div>
+      <table aria-label="Nutrition per 1 stick (5 g)">
+        <thead><tr><th scope="col">Nutrient</th><th scope="col">Amount</th><th scope="col">% Daily Value*</th></tr></thead>
+        <tbody>${nutrients.map(([name, amount, daily]) => `<tr><th scope="row">${name}</th><td>${amount}</td><td>${daily}</td></tr>`).join('')}</tbody>
+      </table>
+      <p class="sr-nutrition-footnote">*Percent Daily Values are based on a 2,000 kcal diet and may vary depending on individual calorie needs</p>
+    </section>`;
+  }
+
+  function servingIcon(type) {
+    const drawing = {
+      cold: `<path d="M22 20h36l-5 48H27zM20 16h40v4H20zM25 39c5-4 10 4 15 0s10 4 15 0"/><path d="m31 28 6 1-1 6-6-1zm13 1 6-1 1 6-6 1z" stroke-width="1.5" opacity=".7"/>`,
+      sparkling: `<path d="M34 13h12v9H34zM34 22c0 10-3 12-5 22l-5 20c-1 5 1 7 5 7h22c4 0 6-2 5-7l-5-20c-2-10-5-12-5-22zM29 48c8-3 14 3 22 0"/><circle cx="33" cy="58" r="1.2"/><circle cx="45" cy="55" r="1.2"/><circle cx="40" cy="64" r="1.2"/><circle cx="49" cy="64" r="1.2"/>`,
+      beer: `<path d="M23 28h31v40H23zM54 33h10v28H54m0-23h5v18h-5M23 28c-5-5-1-12 5-12 1-7 11-9 16-3 7-3 14 3 11 10 3 1 4 3 3 5zM25 39c4-3 8 3 13 0s10 3 14 0M32 43v17m12-17v17"/>`,
+      stick: `<path d="M32 10l4 2 4-2 4 2 4-2v60l-4-2-4 2-4-2-4 2zM32 18h16M32 62h16"/><path d="M40 31v18" opacity=".45"/>`
+    };
+    return `<svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${drawing[type]}</svg>`;
+  }
+
+  function serving(product) {
+    const waterVolume = product.line === 'Protein' ? 300 : 200;
+    return `<aside class="sr-serving" lang="en" aria-labelledby="sr-serving-title">
+      <h4 id="sr-serving-title">How to enjoy</h4>
+      <ul>${[['cold', 'Cold water'], ['sparkling', 'Sparkling water'], ['beer', 'Beer']].map(([type, name]) => `<li>
+        <span class="sr-serving-icons">${servingIcon(type)}<span aria-hidden="true">+</span>${servingIcon('stick')}</span>
+        <div class="sr-serving-copy"><h5>${name}</h5><p><span>${waterVolume} ml</span> + 1 stick</p></div>
+      </li>`).join('')}</ul>
+    </aside>`;
+  }
+
   function carton(product) {
-    const edgeInk = product.line === '프로틴' ? '--side-blend:multiply;--side-ink:.78;' : '';
+    const edgeInk = product.line === 'Protein' ? '--side-blend:multiply;--side-ink:.78;' : '';
     return `<span class="carton-mount" style="${edgeInk}--paper:${product.paper};--lid-paper:${product.lid};--print:url(assets/pack-${product.id}.webp)">
       <span class="carton-model">
         <span class="carton-side"></span><span class="carton-lid"></span>
@@ -32,7 +81,7 @@
       '--crop-x:' + 100 * product.left / (1672 - width) + '%',
       '--accent:' + product.accent
     ].join(';');
-    return `<button class="sr-item sr-carton" data-index="${index}" style="${style}" type="button" aria-haspopup="dialog" aria-label="${product.name} 상세 보기">
+    return `<button class="sr-item sr-carton" data-index="${index}" style="${style}" type="button" aria-haspopup="dialog" aria-label="View ${product.name} details">
       <span class="sr-niche">
         <span class="sr-recess"></span>
         <span class="sr-wash"></span>
@@ -40,7 +89,7 @@
         <span class="sr-vessel">${pack}</span>
       </span>
       <span aria-hidden="true" class="sr-reflect"><span class="carton-mirror">${pack}</span></span>
-      <span aria-hidden="true" class="sr-tag"><span>${product.en}</span><small>${product.name}</small></span>
+      <span aria-hidden="true" class="sr-tag"><span>${product.en}</span><small>${product.name} flavor</small></span>
     </button>`;
   }
 
@@ -49,10 +98,9 @@
       <div class="sr-floor" aria-hidden="true"></div>${products.map(shelf).join('')}
     </div>
     <div class="sr-chrome">
-      <a class="sr-logo" href="#home" aria-label="웰니스 프로바이오틱스 홈"><img class="brand-logo" src="assets/wellness-logo-light.svg" alt="Wellness Probiotics" width="178" height="40"></a>
-      <div class="sr-folio"><span class="sr-eyebrow">제품소개</span>
+      <div class="sr-folio"><span class="sr-eyebrow">Products</span>
         <h2 id="collection-title" lang="en">The <em>Wellness</em> collection</h2>
-        <p>다섯 가지 맛의 콤부차 <i></i><span class="sr-desktop-hint">제품을 선택해 맛을 확인하세요</span><span class="sr-touch-hint">제품을 눌러 맛을 확인하세요</span></p>
+        <p>Five kombucha flavors <i></i><span class="sr-desktop-hint">Select a product to discover its flavor</span><span class="sr-touch-hint">Tap a product to discover its flavor</span></p>
       </div>
     </div></div>`;
 
@@ -62,22 +110,21 @@
   dialog.innerHTML = `<div class="sr-viewport" aria-hidden="true"></div><div aria-hidden="true" class="sr-vignette"></div>
     <div class="sr-details"></div>
     <div class="sr-detail-logo" aria-hidden="true"><img class="brand-logo" src="assets/wellness-logo-light.svg" alt="" width="178" height="40"></div>
-    <button type="button" class="sr-back" autofocus><span aria-hidden="true">←</span> 제품 목록</button>`;
+    <button type="button" class="sr-back" autofocus><span aria-hidden="true">←</span> Back to products</button>`;
   document.body.append(dialog);
-  const room = collection.querySelector('.sr-room');
   const world = collection.querySelector('.sr-world');
   function renderDetail(index) {
     const product = products[index];
     dialog.style.setProperty('--accent', product.accent);
     const details = dialog.querySelector('.sr-details');
-    const title = `원데이 ${product.line || '콜라겐'} 콤부차 · ${product.name}`;
-    details.innerHTML = `<p class="sr-eyebrow">${sectionNumber(index)} / 05</p>
+    const title = `Oneday ${product.line || 'Collagen'} Kombucha · ${product.name}`;
+    details.innerHTML = `<div class="sr-product-copy"><p class="sr-eyebrow">${sectionNumber(index)} / 05</p>
       <h3 id="sr-detail-title"><span lang="en">${product.en}</span><small>${title}</small></h3>
       <p class="sr-story">${product.story}</p>
-      <dl class="sr-notes"><div><dt>구성</dt><dd>5 g × 15포 (75 g)</dd></div><div><dt>1포 열량</dt><dd>${product.kcal} kcal</dd></div></dl>
-      <a class="sr-contact" href="#contact">구매 및 문의 <span aria-hidden="true">↗</span></a>`;
+      ${nutrition(product)}</div>${serving(product)}`;
+    details.querySelector('.sr-product-copy').scrollTop = 0;
     const select = document.getElementById('enquiry-product');
-    if (select) select.value = product.name;
+    if (select) select.value = product.inquiryValue;
   }
   window.moruShowroom = { renderDetail };
 
@@ -129,19 +176,4 @@
     });
     item.addEventListener('blur', () => setLight(pointedAt));
   }
-  let pending = false;
-  function updateHeader() {
-    const rect = room.getBoundingClientRect();
-    const header = document.querySelector('.masthead');
-    const hide = rect.top <= header.offsetHeight + 6 && rect.bottom > header.offsetHeight + 40;
-    header.classList.toggle('sr-immersed', hide);
-    header.inert = hide;
-    pending = false;
-  }
-  function schedule() {
-    if (!pending) { pending = true; requestAnimationFrame(updateHeader); }
-  }
-  window.addEventListener('scroll', schedule, {passive:true});
-  window.addEventListener('resize', schedule);
-  updateHeader();
 })();

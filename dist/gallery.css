@@ -4,10 +4,7 @@
   position: relative;
   background: #030406;
   color: #f7f5f1;
-  scroll-margin-top: calc(0px - var(--header));
 }
-.masthead { transition: transform .3s; }
-.masthead.sr-immersed { transform: translateY(-102%); }
 .sr-room {
   isolation: isolate;
   position: relative;
@@ -147,7 +144,7 @@
   border:1px solid #fff3; border-radius:30px; background:#08090ea8; color:#f5f3ef;
   font:500 10px/1.4 var(--sans); padding:7px 12px;
 }
-.sr-folio {position:absolute;left:clamp(22px,3.65vw,72px);bottom:clamp(26px,5.3vh,68px);text-shadow:0 1px 13px #000}
+.sr-folio {position:absolute;left:clamp(22px,3.65vw,72px);right:5.3%;bottom:clamp(26px,5.3vh,68px);text-shadow:0 1px 13px #000}
 .sr-eyebrow {font:600 clamp(8px,.62vw,11px)/1.5 var(--sans);letter-spacing:.08em;color:#e2dfda}
 .sr-folio h2 {font:650 clamp(32px,3.25vw,66px)/1.1 var(--sans);letter-spacing:-.03em;margin:6px 0 7px;color:#fffaf0}
 .sr-folio h2 em {font-style:normal;color:#d48e9b}
@@ -169,10 +166,16 @@
 }
 .sr-mask-visible .sr-vignette {opacity:1}
 .sr-details {
-  position:absolute;left:clamp(22px,4.1vw,78px);top:50%;transform:translateY(calc(-50% + 12px));width:min(24vw,375px);
+  position:absolute;inset:0;transform:translateY(12px);
   opacity:0;transition:opacity .25s,transform .35s;pointer-events:none;color:#f1efea;
 }
-.sr-detail-visible .sr-details {opacity:1;transform:translateY(-50%);pointer-events:auto}
+.sr-detail-visible .sr-details {opacity:1;transform:none;pointer-events:auto}
+.sr-product-copy,.sr-serving {
+  position:absolute;top:50%;transform:translateY(-50%);max-height:calc(100dvh - 140px);
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:#494443 transparent;
+}
+.sr-product-copy {left:clamp(22px,4.1vw,78px);width:min(28.5vw,465px)}
+.sr-serving {right:clamp(22px,4.1vw,78px);width:min(23vw,320px)}
 .sr-detail-logo,.sr-back {opacity:0;transition:opacity .28s}
 .sr-entered .sr-detail-logo,.sr-entered .sr-back {opacity:1}
 .sr-back {z-index:3;min-height:32px;font-family:var(--sans);gap:8px;cursor:pointer}
@@ -184,8 +187,39 @@
 .sr-notes {margin:22px 0 19px;border-top:1px solid #ffffff2e}
 .sr-notes div {display:flex;align-items:baseline;gap:16px;border-bottom:1px solid #ffffff20;padding:10px 0;font-size:clamp(11px,.79vw,14px)}
 .sr-notes dt {width:54px;flex:none;color:#a6a3a6;font-size:.9em}
-.sr-contact {display:inline-flex;gap:18px;align-items:center;font-size:12px;font-weight:600;border-bottom:1px solid #ccc9c2;padding:3px 0}
+.sr-nutrition {margin-top:24px;border-top:1px solid #ffffff38;padding-top:16px;font-variant-numeric:tabular-nums}
+.sr-nutrition h4,.sr-serving h4 {margin:0;font-size:clamp(18px,1.55vw,25px);font-weight:650;letter-spacing:-.02em;line-height:1.3}
+.sr-net-weight {margin-top:4px;font-size:11px;color:#a9a6a7}
+.sr-energy {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 12px;border-bottom:1px solid #ffffff38}
+.sr-energy > span {font-size:12px;color:#c4c2c3}
+.sr-energy strong {font-size:32px;font-weight:650;line-height:1.15;color:var(--brand-accent)}
+.sr-energy small {margin-left:5px;font-size:13px;font-weight:500}
+.sr-nutrition table {width:100%;border-collapse:collapse;font-size:clamp(12px,.9vw,14px);line-height:1.45}
+.sr-nutrition th,.sr-nutrition td {padding:5px 0;border-bottom:1px solid #ffffff17;text-align:right;font-weight:400;white-space:nowrap}
+.sr-nutrition th:first-child {text-align:left;white-space:normal}
+.sr-nutrition thead th {font-size:10px;color:#aaa7a7;padding-block:8px}
+.sr-nutrition tbody th {font-weight:500}
+.sr-nutrition td:last-child {color:#aaa7a7}
+.sr-nutrition-footnote {margin-top:10px;font-size:11px;line-height:1.6;color:#a9a6a7;word-break:normal}
+.sr-serving h4 {padding-bottom:18px;border-bottom:1px solid #ffffff38}
+.sr-serving ul {list-style:none;padding:0;margin:0}
+.sr-serving li {display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;padding:20px 0;border-bottom:1px solid #ffffff20}
+.sr-serving-icons {display:flex;align-items:center;gap:0;flex:none;color:var(--brand-accent)}
+.sr-serving-icons svg {display:block;width:55px;height:65px;flex:none}
+.sr-serving-icons > span {font-size:18px;font-weight:400}
+.sr-serving-copy h5 {font-size:clamp(13px,1.03vw,16px);font-weight:600;line-height:1.5;margin:0}
+.sr-serving-copy p {margin-top:4px;font-size:12px;color:#c4c2c3;white-space:nowrap}
+.sr-serving-copy p > span {color:#f1efea}
 .sr-disclosure {margin-top:20px;font-size:10px;color:#a5a1a6}
+@media (min-width:761px) and (min-aspect-ratio:1/1) and (max-height:760px) {
+  .sr-product-copy,.sr-serving {max-height:calc(100dvh - 120px)}
+  .sr-details h3 {margin:8px 0 10px}
+  .sr-story {line-height:1.65}
+  .sr-nutrition {margin-top:16px;padding-top:11px}
+  .sr-energy {padding-block:7px}
+  .sr-nutrition th,.sr-nutrition td {padding-block:4px}
+  .sr-nutrition thead th {padding-block:6px}
+}
 @media (max-width:760px), (max-aspect-ratio:1/1) and (max-width:1050px) {
   .sr-room {height:clamp(545px,100svh,1140px)}
   .sr-world {--full-case-height:29%}
@@ -217,8 +251,18 @@
   .sr-dialog::-webkit-scrollbar {display:none}
   .sr-viewport,.sr-vignette{height:100dvh}
   .sr-vignette::after {content:"";position:absolute;inset:0;background:linear-gradient(0deg,#040409 0%,#040409 34%,#040409eb 39%,transparent 48%)}
-  .sr-details {position:relative;left:auto;top:auto;width:auto;margin:60svh 0 0;padding:20px 7% max(40px,env(safe-area-inset-bottom));background:#040409;transform:translateY(8px)}
+  .sr-details {position:relative;inset:auto;width:auto;margin:60svh 0 0;padding:20px 7% max(40px,env(safe-area-inset-bottom));background:#040409;transform:translateY(8px)}
   .sr-detail-visible .sr-details {transform:none}
+  .sr-product-copy,.sr-serving {position:static;width:auto;max-height:none;overflow:visible;transform:none}
+  .sr-serving {margin-top:36px}
+  .sr-nutrition {margin-top:22px}
+  .sr-nutrition h4,.sr-serving h4 {font-size:21px}
+  .sr-nutrition table {font-size:13px}
+  .sr-nutrition th,.sr-nutrition td {padding-block:7px}
+  .sr-nutrition thead th {font-size:11px}
+  .sr-nutrition-footnote {font-size:11px}
+  .sr-serving li {flex-wrap:nowrap;padding-block:16px;gap:20px}
+  .sr-serving-copy h5 {font-size:15px}
   .sr-detail-logo {top:17px}
   .sr-back {position:fixed;top:15px;left:auto;right:5.3%;transform:none;min-height:34px}
   .sr-details h3 {margin:8px 0 12px}.sr-details h3 span{font-size:clamp(34px,8.7vw,58px)}

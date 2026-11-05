@@ -18,7 +18,12 @@ from urllib.parse import urlsplit
 
 
 DIST = Path(__file__).resolve().parent / "dist"
+DEFAULT_INQUIRY_TO = "ceo@kombcha.co.kr"
 PRODUCTS = {"전체 컬렉션", "망고맛", "레몬맛", "바나나맛", "딸기맛", "블루베리맛"}
+PRODUCT_LABELS = {
+    "전체 컬렉션": "Full Collection", "망고맛": "Mango", "레몬맛": "Lemon",
+    "바나나맛": "Banana", "딸기맛": "Strawberry", "블루베리맛": "Blueberry",
+}
 LOCAL_PART = re.compile(r"[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*")
 DOMAIN_LABEL = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?")
 MAX_BODY = 32768
@@ -48,8 +53,9 @@ def validate(payload):
 
 
 def mail_settings():
-    keys = ("INQUIRY_TO", "SMTP_FROM", "SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD")
-    to, sender, host, user, password = (os.environ.get(key, "") for key in keys)
+    to = os.environ.get("INQUIRY_TO", DEFAULT_INQUIRY_TO)
+    keys = ("SMTP_FROM", "SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD")
+    sender, host, user, password = (os.environ.get(key, "") for key in keys)
     security = os.environ.get("SMTP_SECURITY", "ssl").lower()
     port = int(os.environ.get("SMTP_PORT", "587" if security == "starttls" else "465"))
     if not (valid_address(to) and valid_address(sender) and host and user and password
@@ -64,10 +70,11 @@ def deliver(settings, email, product, message):
     mail["From"] = sender
     mail["To"] = recipient
     mail["Reply-To"] = email
-    mail["Subject"] = f"[웰니스 콤부차] {product} 제품 문의"
+    product_label = PRODUCT_LABELS[product]
+    mail["Subject"] = f"[Wellness Kombucha] {product_label} Product Inquiry"
     mail["Date"] = formatdate(localtime=True)
     mail["Message-ID"] = make_msgid(domain=sender.split("@")[1])
-    mail.set_content(f"회신 이메일: {email}\n관심 제품: {product}\n\n{message}\n")
+    mail.set_content(f"Reply email: {email}\nProduct of interest: {product_label}\n\n{message}\n")
     context = ssl.create_default_context()
     if security == "ssl":
         client = smtplib.SMTP_SSL(host, port, timeout=12, context=context)
