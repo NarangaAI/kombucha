@@ -156,6 +156,7 @@ button {cursor:pointer}
 .contact-actions span {font:17px/1 var(--sans);color:#c9c8c3}
 footer {background:#111214}
 .footer-inner {padding-block:28px 34px;color:#a3a3a2;font-size:12px}
+.footer-copyright {margin-top:24px;text-align:right;font-size:12px;line-height:1.6;color:#a3a3a2}
 .footer-brand {display:flex;gap:25px;align-items:center;margin-bottom:18px}
 .footer-inner .brand-logo {width:108px}
 .back-to-top {margin-left:auto;flex:none;padding-block:12px}
